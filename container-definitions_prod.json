@@ -1,6 +1,6 @@
 [
   {
-    "name": "hspc-patient-data-manager-prod",
+    "name": "ehr-app",
     "image": "nexus.hspconsortium.org:18083/hspc/ehr-app:0.0.1",
     "cpu": 0,
     "portMappings": [
