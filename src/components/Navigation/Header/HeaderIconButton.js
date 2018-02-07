@@ -13,7 +13,7 @@ class HeaderIconButton extends Component {
                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
             >
-                <MenuItem primaryText="Doctor Name" />
+                <MenuItem primaryText="Persona Name" />
                 <MenuItem primaryText="Switch Persona" />
                 <MenuItem primaryText="Sign out" />
             </IconMenu>

@@ -5,7 +5,7 @@ class Demo extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            url: "http://bilirubin-risk-chart-test.hspconsortium.org/launch.html?iss=https://api-stu3-test.hspconsortium.org/ReallyLongNameTest/data&launch=mN9V0N",
+            url: "https://bilirubin-risk-chart-test.hspconsortium.org/launch.html?iss=https%3A%2F%2Fapi-stu3-test.hspconsortium.org%2FReallyLongNameTest%2Fdata&launch=Ykn9he",
         };
     }
 

@@ -1,8 +1,6 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import PatientTableTwo from "../../Patient/PatientTableTwo";
 import PersonaTable from "../../Persona/PersonaTable";
 
 /**
@@ -12,15 +10,25 @@ import PersonaTable from "../../Persona/PersonaTable";
  * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
  */
 export default class PersonaSelectorDialog extends React.Component {
-    state = {
-        open: true,
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            bearer: props.match.params.bearer,
+            sandboxApi: props.match.params.sandboxApi,
+            sandboxId: props.match.params.sandboxId,
+            open: true,
+        }
+    }
 
     handleOpen = () => {
         this.setState({open: true});
     };
 
     handleClose = () => {
+        this.setState({open: false});
+    };
+
+    handleSubmit = () => {
         this.setState({open: false});
     };
 
@@ -47,13 +55,17 @@ export default class PersonaSelectorDialog extends React.Component {
         return (
             <div>
                 <Dialog
-                    title="Select A Persona"
+                    title="Select A Practitioner Persona"
                     actions={actions}
                     modal={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}
                 >
-                    <PersonaTable/>
+                    <PersonaTable
+                        sandboxId={this.state.sandboxId}
+                        sandboxApi={this.state.sandboxApi}
+                        bearer={this.state.bearer}
+                    />
                 </Dialog>
             </div>
         );

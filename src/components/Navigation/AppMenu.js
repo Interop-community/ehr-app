@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {Menu, MenuItem} from "material-ui";
-import {ContentLink, NavigationArrowUpward} from "material-ui/svg-icons/index";
-
 
 
 class AppMenu extends Component{

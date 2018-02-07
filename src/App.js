@@ -3,11 +3,6 @@ import './App.css';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom'
 import Routes from "./components/Navigation/Routes";
 
 class App extends Component {

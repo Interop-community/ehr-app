@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
-import {AppBar, Drawer, Menu, MenuItem, Paper, Toolbar} from "material-ui";
+import {AppBar, Drawer, Paper} from "material-ui";
 import Demo from "../../Demo/Demo";
 import BottomNavigationSimple from "../BottomNavigation/BottomNavigationSimple";
-import BpIcon from "../../Icons/BpIcon";
-import BabyGrowthIcon from "../../Icons/BabyGrowthIcon";
 import HeaderIconButton from "./HeaderIconButton";
-import {ContentLink, NavigationArrowUpward} from "material-ui/svg-icons/index";
 import AppMenu from "../AppMenu";
 
 
@@ -25,8 +22,11 @@ class HeaderBar extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {open: false,
-            selectedItem: 1};
+        this.state = {
+            open: false,
+            selectedItem: 1,
+            title: "Choose Patient",
+        };
 
     }
 
@@ -38,7 +38,7 @@ class HeaderBar extends Component {
         return (
             <div>
                 <AppBar onLeftIconButtonClick={this.handleToggle}
-                        title="User Persona"
+                        title={this.state.title}
                         iconElementRight={<HeaderIconButton/>}></AppBar>
                 <Drawer
                     docked={false}

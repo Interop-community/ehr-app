@@ -2,7 +2,6 @@ import React from "react";
 import {
     BrowserRouter as Router,
     Route,
-    Link
 } from 'react-router-dom'
 import PatientSelectorDialog from "./DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./DialogBoxes/PersonaSelectorDialog";
@@ -26,10 +25,8 @@ export default class Routes extends React.Component{
                 <Router>
                     <div>
                         <hr/>
-                        <Route path="/launch"
-                               render={() => {
-                                   return <PersonaSelectorDialog/>
-                               }}
+                        <Route path="/launch/:sandboxId/:sandboxApi/:bearer"
+                               component={PersonaSelectorDialog}
                         />
                         <Route path="/Patient"
                                render={() => {
