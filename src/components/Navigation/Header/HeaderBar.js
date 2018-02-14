@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {AppBar, Drawer, Paper} from "material-ui";
+import {AppBar, Drawer, FlatButton, MenuItem, Paper} from "material-ui";
 import Demo from "../../Demo/Demo";
 import BottomNavigationSimple from "../BottomNavigation/BottomNavigationSimple";
 import HeaderIconButton from "./HeaderIconButton";
 import AppMenu from "../AppMenu";
+import PatientSelectorDialog from "../DialogBoxes/PatientSelectorDialog";
+import PersonaSelectorDialog from "../DialogBoxes/PersonaSelectorDialog";
 
 
 const style = {
@@ -35,23 +37,42 @@ class HeaderBar extends Component {
     handleClose = () => this.setState({open: false});
 
     render() {
+
         return (
             <div>
                 <AppBar onLeftIconButtonClick={this.handleToggle}
-                        title={this.state.title}
-                        iconElementRight={<HeaderIconButton/>}></AppBar>
+                        title='Welcome to EHR Simulator'
+                        // iconElementRight={<HeaderIconButton
+                        //     selectedPersonaName={this.props.selectedPersonaName}
+                        //     handlePersonaSelection={this.props.handlePersonaSelection}
+                        //     bearer={this.props.bearer}
+                        //     sandboxApi={this.props.sandboxApi}
+                        //     sandboxId={this.props.sandboxId}
+                        // />}
+                ></AppBar>
                 <Drawer
                     docked={false}
                     width={200}
                     open={this.state.open}
                     onRequestChange={(open) => this.setState({open})}
                 >
-                    <Paper style={style.paper}>
-                        <AppMenu/>
-                    </Paper>
+                    <MenuItem onClick={this.handleClose}>
+                        <PatientSelectorDialog
+                            handlePatientSelection={this.props.handlePatientSelection}
+                            bearer={this.props.bearer}
+                            sandboxApi={this.props.sandboxApi}
+                            sandboxId={this.props.sandboxId}
+                        />
+                    </MenuItem>
+                    <MenuItem onClick={this.handleClose}>
+                        <PersonaSelectorDialog
+                            handlePersonaSelection={this.props.handlePersonaSelection}
+                            bearer={this.props.bearer}
+                            sandboxApi={this.props.sandboxApi}
+                            sandboxId={this.props.sandboxId}
+                        />
+                    </MenuItem>
                 </Drawer>
-                <Demo />
-                <BottomNavigationSimple/>
             </div>
         );
     }

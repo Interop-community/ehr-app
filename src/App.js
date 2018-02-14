@@ -8,11 +8,6 @@ import Routes from "./components/Navigation/Routes";
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {open: false};
-    }
-
-    handleTouchMap() {
-        this.setState({open: !this.state.open});
     }
 
   render() {

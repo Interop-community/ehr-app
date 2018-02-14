@@ -12,12 +12,26 @@ import PersonaTable from "../../Persona/PersonaTable";
 export default class PersonaSelectorDialog extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            bearer: props.match.params.bearer,
-            sandboxApi: props.match.params.sandboxApi,
-            sandboxId: props.match.params.sandboxId,
-            open: true,
+        if(props.show){
+            this.state = {
+                bearer: props.bearer,
+                sandboxApi: props.sandboxApi,
+                sandboxId: props.sandboxId,
+                open: true,
+                blah: "childpersonablah",
+                selectDoc: null,
+            }
+        }else {
+            this.state = {
+                bearer: props.bearer,
+                sandboxApi: props.sandboxApi,
+                sandboxId: props.sandboxId,
+                open: false,
+                selectDoc: null,
+
+            }
         }
+
     }
 
     handleOpen = () => {
@@ -28,40 +42,26 @@ export default class PersonaSelectorDialog extends React.Component {
         this.setState({open: false});
     };
 
-    handleSubmit = () => {
-        this.setState({open: false});
-    };
+    handleSelectedDoc = (doc) => {
+        this.setState({selectedDoc: doc});
+        this.props.handlePersonaSelection(doc);
+        this.handleClose();
+
+    }
 
     render() {
-        const actions = [
-            <FlatButton
-                label="Create Persona"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-            <FlatButton
-                label="Cancel"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-            <FlatButton
-                label="Submit"
-                primary={true}
-                keyboardFocused={true}
-                onClick={this.handleClose}
-            />,
-        ];
 
         return (
             <div>
+                <div onClick={this.handleOpen}>Select a Persona</div>
                 <Dialog
                     title="Select A Practitioner Persona"
-                    actions={actions}
                     modal={false}
                     open={this.state.open}
                     onRequestClose={this.handleClose}
                 >
                     <PersonaTable
+                        handleSelectedDoc={this.handleSelectedDoc}
                         sandboxId={this.state.sandboxId}
                         sandboxApi={this.state.sandboxApi}
                         bearer={this.state.bearer}

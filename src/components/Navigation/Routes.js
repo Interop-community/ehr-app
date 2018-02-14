@@ -5,7 +5,8 @@ import {
 } from 'react-router-dom'
 import PatientSelectorDialog from "./DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./DialogBoxes/PersonaSelectorDialog";
-import HeaderBar from "./Header/HeaderBar";
+import Home from "../Home";
+import Demo from "../Demo/Demo";
 
 
 
@@ -14,24 +15,16 @@ export default class Routes extends React.Component{
         super(props);
     }
 
-    updateDialogOpen(){
-        this.props.open = true;
-    }
-
     render(){
         return(
             <div>
-                <HeaderBar/>
                 <Router>
                     <div>
-                        <hr/>
                         <Route path="/launch/:sandboxId/:sandboxApi/:bearer"
-                               component={PersonaSelectorDialog}
+                               component={Home}
                         />
-                        <Route path="/Patient"
-                               render={() => {
-                                   return <PatientSelectorDialog/>
-                               }}
+                        <Route path="/demo"
+                               component={Demo}
                         />
                     </div>
                 </Router>

@@ -18,12 +18,11 @@ export default class PersonaTable extends Component {
             fixedHeader: true,
             fixedFooter: true,
             stripedRows: false,
-            showRowHover: false,
+            showRowHover: true,
             selectable: true,
-            multiSelectable: false,
             enableSelectAll: false,
             deselectOnClickaway: true,
-            showCheckboxes: true,
+            showCheckboxes: false,
             height: '300px',
             personaItems: [],
             items: [],
@@ -33,15 +32,11 @@ export default class PersonaTable extends Component {
         };
     }
 
-    handleToggle = (event, toggled) => {
-        this.setState({
-            [event.target.name]: toggled,
-        });
+    handleToggle = (selectedRow) => {
+        this.props.handleSelectedDoc(this.state.personaArray[selectedRow[0]]);
     };
 
-    handleChange = (event) => {
-        this.setState({height: event.target.value});
-    };
+
 
     componentWillMount(){
         // let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTY4OTI3OTUsImlhdCI6MTUxNjgwNjM5NSwianRpIjoiYWRjNzIwYjYtOWU2MC00NWVlLTgyODctOGMxNTc4ZGI3NzNjIn0.BW8GTlpfUazXUfg_fLrZaopNUQgt8sDZgWaeExRU0MPclXTFTAw-XLUfUYZubBOavdIwVDrGpq3-DxFYSYptsMnalx_Htf4ESwCUJZgTGtwLSfHBbgbmwGWJ8sgEyyiIN-tfQeNT1EtjzTYS0AFhlfUePLOVebAuSbFT7zdyffw6Snb3hc86mePd1lgSmDCPBZ_11k8WseMxKCnYohROk2lQXuXIUiuTQE1dxtxZ1PPrCzxdVaAu8cR3Z9Qy3BUx2XOYZ-p4Bs7Z4zpfemoADI3nJklQ5s3__E9sDefzGr43btgbDwFZgSOkOj67B1nUO_AKq878DXsLIvqvXVfggg';
@@ -69,6 +64,7 @@ export default class PersonaTable extends Component {
                     </TableRow>
                 );
                 this.setState({personaItems: listItems});
+                this.setState({personaArray: trimmedList});
 
             })
 
@@ -81,13 +77,10 @@ export default class PersonaTable extends Component {
                     height={this.state.height}
                     fixedHeader={this.state.fixedHeader}
                     fixedFooter={this.state.fixedFooter}
-                    selectable={this.state.selectable}
-                    multiSelectable={this.state.multiSelectable}
+                    onRowSelection={this.handleToggle}
                 >
                     <TableHeader
                         displaySelectAll={this.state.showCheckboxes}
-                        adjustForCheckbox={this.state.showCheckboxes}
-                        enableSelectAll={this.state.enableSelectAll}
                     >
                         <TableRow>
                             <TableHeaderColumn tooltip="Display Name">Display Name</TableHeaderColumn>
