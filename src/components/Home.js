@@ -72,11 +72,12 @@ export default class Home extends React.Component{
         const divStyle = {
             float: 'left',
             backgroundColor: '#4D5B66',
-            width: '185px'
+            width: '185px',
+            height: '800px',
         };
 
         const appStyle = {
-            float: 'left'
+            float: 'left',
         };
 
         const patientDivStyle = {
@@ -91,7 +92,8 @@ export default class Home extends React.Component{
 
         return(
             <div>
-                <HeaderBar
+                <PatientView
+                    patient={this.state.selectedPatient}
                     selectedPersonaName={this.state.selectedPersonaName}
                     bearer={this.state.bearer}
                     sandboxApi={this.state.sandboxApi}
@@ -100,9 +102,6 @@ export default class Home extends React.Component{
                     handleAppMenu={this.handleAppMenu}
                     currentApp={this.state.currentApp}
                     handlePersonaSelection={this.handlePersonaSelection}
-                />
-                <PatientView
-                    patient={this.state.selectedPatient}
                 />
                 <Paper style={divStyle}>
                     <AppMenu

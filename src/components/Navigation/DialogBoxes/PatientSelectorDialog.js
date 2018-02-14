@@ -3,6 +3,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import PersonaTable from "../../Persona/PersonaTable";
 import PatientTableTwo from "../../Patient/PatientTableTwo";
+import SearchIcon from 'react-icons/lib/md/search'
+
 
 
 /**
@@ -23,7 +25,7 @@ export default class PatientSelectorDialog extends React.Component {
             };
         }else{
             this.state = {
-                open: false,
+                open: true,
                 selectedPatient: null,
                 selectedPatientName: "Select Patient",
                 title: "Select a Patient",
@@ -59,9 +61,24 @@ export default class PatientSelectorDialog extends React.Component {
 
         ];
 
+        const patientPickerStyle = {
+            float: 'right',
+            padding: '18px 5px 5px 5px',
+            cursor: 'pointer',
+            fontSize: '20px'
+        };
+
+        const searchIconStyle = {
+            height: '40px',
+            width: '40px',
+            paddingBottom: '10px',
+            paddingLeft: '3px',
+            paddingRight: '10px'
+        }
+
         return (
             <div>
-                <div onClick={this.handleOpen}>{this.state.title}</div>
+                <div style={patientPickerStyle} onClick={this.handleOpen}>Select Patient<SearchIcon style={searchIconStyle} /></div>
                 <Dialog
                     title={this.state.title}
                     actions={actions}

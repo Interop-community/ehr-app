@@ -11,6 +11,12 @@
       }
     ],
     "memoryReservation": 100,
-    "essential": true
+    "essential": true,
+    "environment": [
+      {
+        "name": "ACTIVE_ENV",
+        "value": "test"
+      }
+    ]
   }
 ]

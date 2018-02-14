@@ -56,7 +56,7 @@ class AppMenu extends Component{
     constructor(props){
         super(props);
         this.state = {
-            selectedItem: 1,
+            selectedItem: 0,
             items: [],
             token: props.bearer,
         };
@@ -99,10 +99,10 @@ class AppMenu extends Component{
     }
 
     render(){
-        const divStyle = {
+        const menuStyle = {
             float: 'left',
             backgroundColor: '#4D5B66',
-            width: '165px'
+            width: '165px',
         };
 
         return(
