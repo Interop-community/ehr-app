@@ -43,7 +43,6 @@ export default class PatientTableTwo extends Component {
         })
             .then( response => response.json() )
             .then( (responseData) => {
-                console.log(responseData)
                 const listItems = responseData.entry.map((d) =>
                     <TableRow key={d.resource.id}>
                         <TableRowColumn>{d.resource.name[0].family}</TableRowColumn>
@@ -53,7 +52,9 @@ export default class PatientTableTwo extends Component {
                 );
                 this.setState({items: listItems});
                 this.setState({patientArray: responseData});
-            })
+            }).catch(function() {
+            console.log("error");
+        });
 
     }
 

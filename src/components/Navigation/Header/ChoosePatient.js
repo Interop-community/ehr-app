@@ -1,5 +1,4 @@
 import React from 'react';
-import PatientSelectorDialog from "../DialogBoxes/PatientSelectorDialog";
 
 export default class ChoosePatient extends React.Component{
     constructor(props) {

@@ -8,24 +8,31 @@ import {
     TableRowColumn,
 } from 'material-ui/Table';
 
+/**
+ * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
+ */
 export default class PatientTable extends Component {
-    state = {
-        selected: [1],
-    };
-
-    isSelected = (d) => {
-        return this.state.selected.indexOf(d.resource.id);
-    };
-
-    handleRowSelection = (selectedRows) => {
-        this.setState({
-            selected: selectedRows,
-        });
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            fixedHeader: true,
+            fixedFooter: true,
+            stripedRows: false,
+            showRowHover: true,
+            selectable: false,
+            multiSelectable: false,
+            enableSelectAll: false,
+            deselectOnClickaway: true,
+            showCheckboxes: false,
+            height: '300px',
+        };
+    }
 
     componentWillMount(){
-        let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTc2OTcxMDQsImlhdCI6MTUxNzYxMDcwNCwianRpIjoiZjc3Y2UxOTktZTU1Ny00N2Q5LWFiMmEtYWIzNzBhZWE1ZjRmIn0.fG6JVz5NVle0Y5hxsc5wSn6dA5mCbCnoF56NEIhFMiMtgnYGmBd_u2MMDJ780igLr9tgycZMAo3OaDCJvL_jZJ2TdAdOsZ3oENiZj00_08X8gR5BZj3CJHa0LJcmcsrkVvo5hx_amO3cUip_t4VvXdOP71iQ8EBARe48umi29EyDsMdCD8bDWwF1BiihQ5bxZp2R1Tec9efrK7PdRuixHvlyULlFbTsq0vbWhVh31KtLqtczARv9eiblL6DmV1BJ9qwl8DQbARvREdUm3mtzoSgqfcKQcC6ThTd32Fnx2sHfLSDor-Byir8Lfn7opVTBIta1JcyY7ToiGegixtD0oQ';
-        let url = 'https://api.hspconsortium.org/hspcdemo/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=5'
+        // let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTY4OTI3OTUsImlhdCI6MTUxNjgwNjM5NSwianRpIjoiYWRjNzIwYjYtOWU2MC00NWVlLTgyODctOGMxNTc4ZGI3NzNjIn0.BW8GTlpfUazXUfg_fLrZaopNUQgt8sDZgWaeExRU0MPclXTFTAw-XLUfUYZubBOavdIwVDrGpq3-DxFYSYptsMnalx_Htf4ESwCUJZgTGtwLSfHBbgbmwGWJ8sgEyyiIN-tfQeNT1EtjzTYS0AFhlfUePLOVebAuSbFT7zdyffw6Snb3hc86mePd1lgSmDCPBZ_11k8WseMxKCnYohROk2lQXuXIUiuTQE1dxtxZ1PPrCzxdVaAu8cR3Z9Qy3BUx2XOYZ-p4Bs7Z4zpfemoADI3nJklQ5s3__E9sDefzGr43btgbDwFZgSOkOj67B1nUO_AKq878DXsLIvqvXVfggg';
+        // let url = 'https://api.hspconsortium.org/hspcdemo/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=5';
+        let token = this.props.bearer;
+        let url = "https://api.hspconsortium.org/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=100";
 
         fetch(url, {
             method: 'GET',
@@ -37,31 +44,53 @@ export default class PatientTable extends Component {
             .then( response => response.json() )
             .then( (responseData) => {
                 const listItems = responseData.entry.map((d) =>
-                    <TableRow key={d.resource.id} selected={this.isSelected(d)}>
+                    <TableRow key={d.resource.id}>
                         <TableRowColumn>{d.resource.name[0].family}</TableRowColumn>
                         <TableRowColumn>{d.resource.birthDate}</TableRowColumn>
                         <TableRowColumn>{d.resource.gender}</TableRowColumn>
                     </TableRow>
                 );
                 this.setState({items: listItems});
-            })
+                this.setState({patientArray: responseData});
+            }).catch(function() {
+            console.log("error");
+        });
 
     }
 
+    handleToggle = (selectedRow) => {
+        this.props.handleSelectedPatient(this.state.patientArray.entry[selectedRow[0]]);
+    };
+
     render() {
         return (
-            <Table onRowSelection={this.handleRowSelection}>
-                <TableHeader>
-                    <TableRow>
-                        <TableHeaderColumn>Name</TableHeaderColumn>
-                        <TableHeaderColumn>Birth Date</TableHeaderColumn>
-                        <TableHeaderColumn>Gender</TableHeaderColumn>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {this.state.items}
-                </TableBody>
-            </Table>
+            <div>
+                <Table
+                    height={this.state.height}
+                    fixedHeader={this.state.fixedHeader}
+                    fixedFooter={this.state.fixedFooter}
+                    onRowSelection={this.handleToggle}
+                >
+                    <TableHeader
+                        displaySelectAll={this.state.showCheckboxes}
+
+                    >
+                        <TableRow>
+                            <TableHeaderColumn tooltip="The Name">Name</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="The Birth Date">Birth Date</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="The Status">Gender</TableHeaderColumn>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody
+                        displayRowCheckbox={this.state.showCheckboxes}
+                        deselectOnClickaway={this.state.deselectOnClickaway}
+                        showRowHover={this.state.showRowHover}
+                        stripedRows={this.state.stripedRows}
+                    >
+                        {this.state.items}
+                    </TableBody>
+                </Table>
+            </div>
         );
     }
 }

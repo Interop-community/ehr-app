@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {IconButton, IconMenu, MenuItem} from "material-ui";
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import {IconMenu} from "material-ui";
 import PersonaSelectorDialog from "../DialogBoxes/PersonaSelectorDialog";
 
 class HeaderIconButton extends Component {

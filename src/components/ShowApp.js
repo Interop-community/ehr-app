@@ -1,7 +1,5 @@
 import React, { PureComponent } from "react"
 import Iframe from 'react-iframe'
-import {Paper} from "material-ui";
-import Demo from "./Demo/Demo";
 
 class ShowApp extends PureComponent {
     constructor(props){

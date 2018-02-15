@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
-import {AppBar, Drawer, FlatButton, MenuItem, Paper} from "material-ui";
-import Demo from "../../Demo/Demo";
-import BottomNavigationSimple from "../BottomNavigation/BottomNavigationSimple";
-import HeaderIconButton from "./HeaderIconButton";
-import AppMenu from "../AppMenu";
+import {AppBar, Drawer, MenuItem} from "material-ui";
 import PatientSelectorDialog from "../DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "../DialogBoxes/PersonaSelectorDialog";
 

@@ -53,7 +53,6 @@ export default class PersonaSelectorDialog extends React.Component {
 
         return (
             <div>
-                <div onClick={this.handleOpen}>Select a Persona</div>
                 <Dialog
                     title="Select A Practitioner Persona"
                     modal={false}

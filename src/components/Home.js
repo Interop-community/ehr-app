@@ -1,12 +1,10 @@
 import React from 'react';
-import HeaderBar from "./Navigation/Header/HeaderBar";
-import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
-import Demo from "./Demo/Demo";
 import AppMenu from "./Navigation/AppMenu";
 import {Paper} from "material-ui";
-import BottomNavigationSimple from "./Navigation/BottomNavigation/BottomNavigationSimple";
 import ShowApp from "./ShowApp";
 import PatientView from "./Patient/PatientView";
+import GuestGreeting from "./Greeting/GuestGreeting";
+import MainGreeting from "./Greeting/MainGreeting";
 
 export default class Home extends React.Component{
     constructor(props){
@@ -24,6 +22,7 @@ export default class Home extends React.Component{
             selectedPatientName: "Patient Info Here",
             currentAppName: "App Goes here",
             getLaunchCodeUrl: "https://api.hspconsortium.org/hspcdemo/data/_services/smart/Launch",
+            guideMessage: "Please select a patient and app to render view."
 
         }
     }
@@ -111,18 +110,12 @@ export default class Home extends React.Component{
                         sandboxId={this.props.match.params.sandboxId}
                     />
                 </Paper>
-                {/*<Demo*/}
-                    {/*bearer={this.state.bearer}*/}
-                    {/*sandboxApi={this.state.sandboxApi}*/}
-                    {/*sandboxId={this.state.sandboxId}*/}
-                    {/*currentApp={this.state.currentApp}*/}
-                {/*/>*/}
+
                 <Paper style={appStyle}>
                     <ShowApp
                         url={this.state.url}
                     />
                 </Paper>
-
             </div>
         );
     }
