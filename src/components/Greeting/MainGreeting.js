@@ -1,5 +1,4 @@
 import React from "react";
-import GuestGreeting from "./GuestGreeting";
 
 export default class MainGreeting extends React.Component{
     constructor(props){

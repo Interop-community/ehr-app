@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react"
 import PersonIcon from 'react-icons/lib/md/person';
-import SearchIcon from 'react-icons/lib/md/search'
 import PatientSelectorDialog from "../Navigation/DialogBoxes/PatientSelectorDialog";
 
 
@@ -30,11 +29,6 @@ class PatientView extends PureComponent {
 
         const infoTitleStyle = {
             float: 'left',
-            padding: '30px 5px 5px 30px',
-        };
-
-        const patientPickerStyle = {
-            float: 'right',
             padding: '30px 5px 5px 30px',
         };
 

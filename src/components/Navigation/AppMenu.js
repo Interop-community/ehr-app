@@ -94,16 +94,10 @@ class AppMenu extends Component{
                 //Add Bilirubin app to list
                 responseData.push(biliApp);
                 this.setState({apps: responseData});
-                console.log(responseData)
             })
     }
 
     render(){
-        const menuStyle = {
-            float: 'left',
-            backgroundColor: '#4D5B66',
-            width: '165px',
-        };
 
         return(
             <Menu

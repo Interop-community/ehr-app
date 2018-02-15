@@ -6,9 +6,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Routes from "./components/Navigation/Routes";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-    }
 
   render() {
     return (

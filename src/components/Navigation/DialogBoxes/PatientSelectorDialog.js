@@ -42,7 +42,6 @@ export default class PatientSelectorDialog extends React.Component {
     };
 
     handleSelectedPatient = (doc) => {
-        console.log(doc)
         this.setState({selectedPatient: doc});
         this.setState({selectedPatientName: doc.resource.name[0].family});
         this.props.handlePatientSelection(doc);

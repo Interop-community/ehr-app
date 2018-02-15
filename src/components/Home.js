@@ -3,8 +3,6 @@ import AppMenu from "./Navigation/AppMenu";
 import {Paper} from "material-ui";
 import ShowApp from "./ShowApp";
 import PatientView from "./Patient/PatientView";
-import GuestGreeting from "./Greeting/GuestGreeting";
-import MainGreeting from "./Greeting/MainGreeting";
 
 export default class Home extends React.Component{
     constructor(props){
@@ -34,8 +32,6 @@ export default class Home extends React.Component{
 
     handlePatientSelection = (e) => {
         this.setState({selectedPatient: e});
-        console.log(e);
-        console.log("patient");
         this.setState({selectedPatientName: e.resource.name[0].family})
         this.setState({selectedPatientId: e.resource.id})
     }
@@ -58,11 +54,7 @@ export default class Home extends React.Component{
         })
             .then( response => response.json() )
             .then((responseData) => {
-                console.log("Response data");
-                console.log(responseData);
                 this.setState({url: e[0].launchUri + "?iss=https://api.hspconsortium.org/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
-                console.log(this.state.url);
-
             })
     }
 
@@ -77,16 +69,6 @@ export default class Home extends React.Component{
 
         const appStyle = {
             float: 'left',
-        };
-
-        const patientDivStyle = {
-            float: 'left',
-            width: '100%',
-            height: '80px',
-            background: 'linear-gradient(#3EA8E7,#0C76B4)',
-            borderStyle: 'solid',
-            borderWidth: '1px',
-
         };
 
         return(

@@ -5,7 +5,7 @@ class ShowApp extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            url: "https://cardiac-risk-app.hspconsortium.org/launch.html?iss=https://api.hspconsortium.org/hspcdemo/data&launch=PLy44n",
+            url: "",
         };
     }
 
@@ -13,7 +13,7 @@ class ShowApp extends PureComponent {
 
         return (
             <Iframe
-                url={this.props.url}
+                url={this.props.url != null? this.props.url:this.state.url}
                 // url="https://gallery.hspconsortium.org"
                 id="myId"
                 className="myClassname"

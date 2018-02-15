@@ -4,15 +4,11 @@ import {
     Route,
 } from 'react-router-dom'
 import Home from "../Home";
-import GuestGreeting from "../Greeting/GuestGreeting";
 import MainGreeting from "../Greeting/MainGreeting";
 
 
 
 export default class Routes extends React.Component{
-    constructor(props){
-        super(props);
-    }
 
     render(){
         return(
@@ -23,7 +19,7 @@ export default class Routes extends React.Component{
                                component={Home}
                         />
                         <Route path="/"
-                               render={()=><MainGreeting/>}
+                               component={MainGreeting}
                         />
                     </div>
                 </Router>
