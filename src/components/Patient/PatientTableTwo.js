@@ -32,7 +32,11 @@ export default class PatientTableTwo extends Component {
         // let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTY4OTI3OTUsImlhdCI6MTUxNjgwNjM5NSwianRpIjoiYWRjNzIwYjYtOWU2MC00NWVlLTgyODctOGMxNTc4ZGI3NzNjIn0.BW8GTlpfUazXUfg_fLrZaopNUQgt8sDZgWaeExRU0MPclXTFTAw-XLUfUYZubBOavdIwVDrGpq3-DxFYSYptsMnalx_Htf4ESwCUJZgTGtwLSfHBbgbmwGWJ8sgEyyiIN-tfQeNT1EtjzTYS0AFhlfUePLOVebAuSbFT7zdyffw6Snb3hc86mePd1lgSmDCPBZ_11k8WseMxKCnYohROk2lQXuXIUiuTQE1dxtxZ1PPrCzxdVaAu8cR3Z9Qy3BUx2XOYZ-p4Bs7Z4zpfemoADI3nJklQ5s3__E9sDefzGr43btgbDwFZgSOkOj67B1nUO_AKq878DXsLIvqvXVfggg';
         // let url = 'https://api.hspconsortium.org/hspcdemo/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=5';
         let token = this.props.bearer;
-        let url = "https://api.hspconsortium.org/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=100";
+        let url = "https://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=100";
+        if(this.props.refApi.includes("localhost")){
+            url = "http://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=100";
+        }
+
 
         fetch(url, {
             method: 'GET',

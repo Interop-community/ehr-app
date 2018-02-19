@@ -59,6 +59,7 @@ class PatientView extends PureComponent {
                 <div style={infoTitleStyle}>MRN: </div>
                 <div style={infoStyle}>{(this.state.mrn != null) ? this.state.mrn : 'N/A'}</div>
                 <PatientSelectorDialog
+                    refApi={this.props.refApi}
                     handlePatientSelection={this.props.handlePatientSelection}
                     bearer={this.props.bearer}
                     sandboxApi={this.props.sandboxApi}

@@ -85,6 +85,7 @@ export default class PatientSelectorDialog extends React.Component {
                     onRequestClose={this.handleClose}
                 >
                     <PatientTableTwo
+                        refApi={this.props.refApi}
                         handleSelectedPatient={this.handleSelectedPatient}
                         sandboxId={this.props.sandboxId}
                         sandboxApi={this.props.sandboxApi}

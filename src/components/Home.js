@@ -11,6 +11,7 @@ export default class Home extends React.Component{
             bearer: props.match.params.bearer,
             sandboxApi: props.match.params.sandboxApi,
             sandboxId: props.match.params.sandboxId,
+            refApi: props.match.params.refApi,
             show: true,
             blah: "Parent",
             selectedPersona: null,
@@ -19,7 +20,8 @@ export default class Home extends React.Component{
             listApps: null,
             selectedPatientName: "Patient Info Here",
             currentAppName: "App Goes here",
-            getLaunchCodeUrl: "https://api.hspconsortium.org/hspcdemo/data/_services/smart/Launch",
+            getLaunchCodeUrl: "https://" + props.match.params.refApi + "/" + props.match.params.sandboxId + "/data/_services/smart/Launch",
+            getLocalLaunchCodeUrl: "http://" + props.match.params.refApi + "/" + props.match.params.sandboxId + "/data/_services/smart/Launch",
             guideMessage: "Please select a patient and app to render view."
 
         }
@@ -44,7 +46,11 @@ export default class Home extends React.Component{
         var text = '{ "client_id":"' + e[0].authClient.clientName+ '","parameters":{"patient":"' + this.state.selectedPatientId + '","need_patient_banner":false}}';
         var obj = JSON.parse(text);
         //make call to get launch code
-        fetch(this.state.getLaunchCodeUrl, {
+        var launchCodeUri = this.state.getLaunchCodeUrl;
+        if(this.state.refApi.includes("localhost")){
+            launchCodeUri = this.state.getLocalLaunchCodeUrl;
+        }
+        fetch(launchCodeUri, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -54,7 +60,10 @@ export default class Home extends React.Component{
         })
             .then( response => response.json() )
             .then((responseData) => {
-                this.setState({url: e[0].launchUri + "?iss=https://api.hspconsortium.org/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
+                this.setState({url: e[0].launchUri + "?iss=https://" + this.state.refApi + "/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
+                if(this.state.refApi.includes("localhost")){
+                    this.setState({url: e[0].launchUri + "?iss=http://" + this.state.refApi + "/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
+                }
             })
     }
 
@@ -74,6 +83,7 @@ export default class Home extends React.Component{
         return(
             <div>
                 <PatientView
+                    refApi={this.state.refApi}
                     patient={this.state.selectedPatient}
                     selectedPersonaName={this.state.selectedPersonaName}
                     bearer={this.state.bearer}

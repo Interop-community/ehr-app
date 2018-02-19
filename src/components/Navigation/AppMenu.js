@@ -75,7 +75,10 @@ class AppMenu extends Component{
 
     componentWillMount(){
         let token = this.state.token;
-        let url = 'https://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId
+        let url = 'https://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId;
+        if(this.props.sandboxApi.includes("localhost")){
+            url = 'http://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId;
+        }
         // let token = this.props.bearer;
         // let url = 'https://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId;
 

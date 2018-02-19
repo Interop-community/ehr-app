@@ -15,7 +15,7 @@ export default class Routes extends React.Component{
             <div>
                 <Router>
                     <div>
-                        <Route path="/launch/:sandboxId/:sandboxApi/:bearer"
+                        <Route path="/launch/:sandboxId/:sandboxApi/:refApi/:bearer"
                                component={Home}
                         />
                         <Route path="/"
