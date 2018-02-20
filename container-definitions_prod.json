@@ -15,7 +15,7 @@
     "environment": [
       {
         "name": "ACTIVE_ENV",
-        "value": "test"
+        "value": "prod"
       }
     ]
   }
