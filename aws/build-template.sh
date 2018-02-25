@@ -12,12 +12,12 @@ TEMPLATE_FILE="../aws/task-definition.json"
 set -x
 
 echo "dynamically fix ${TEMPLATE_FILE}"
-jq ".family=\"${2}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
-jq ".containerDefinitions[0].name=\"${2}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
-jq ".containerDefinitions[0].image=\"${3}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
-jq ".containerDefinitions[0].portMappings[0].containerPort=(${4} | tonumber)" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
-jq ".containerDefinitions[0].memoryReservation=(${5} | tonumber)" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
-jq ".containerDefinitions[0].logConfiguration.options.awslogs-group=\"/ecs/${2}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".family=\"${1}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".containerDefinitions[0].name=\"${1}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".containerDefinitions[0].image=\"${2}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".containerDefinitions[0].portMappings[0].containerPort=(${3} | tonumber)" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".containerDefinitions[0].memoryReservation=(${4} | tonumber)" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
+jq ".containerDefinitions[0].logConfiguration.options.awslogs-group=\"/ecs/${1}\"" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
 
 cat ${TEMPLATE_FILE}
 
