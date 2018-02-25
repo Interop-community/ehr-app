@@ -1,6 +1,11 @@
 {
   "name": "ehr-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/hspconsortium/patient-data-manager.git"
+  },
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free-solid": "^5.0.3",
@@ -22,5 +27,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "config": {
+    "port": "3000",
+    "memory": "100"
   }
 }
