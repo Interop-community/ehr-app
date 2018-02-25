@@ -1,6 +1,6 @@
 {
   "name": "ehr-app",
-  "version": "0.1.0-SNAPSHOT",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free-solid": "^5.0.3",
