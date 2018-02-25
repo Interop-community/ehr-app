@@ -1,17 +1,17 @@
 {
   "executionRoleArn": "arn:aws:iam::657600230790:role/ecsTaskExecutionRole",
-  "family": "ehr-simulator-prod",
+  "family": "ehr-app-prod",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "ehr-simulator-prod",
+      "name": "ehr-app-prod",
       "image": "TBD",
       "cpu": 256,
       "memoryReservation": 512,
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/ehr-simulator-prod",
+          "awslogs-group": "/ecs/ehr-app-prod",
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
