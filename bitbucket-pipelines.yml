@@ -13,15 +13,8 @@ pipelines:
   branches:
     develop:
       - step:
-          name: build the source code
-          caches:
-            - node
-          script:
-            - npm install
-      - step:
           name: build docker and upload to docker hub
           script:
-            - npm install
             - export DOCKER_PROJECT_VERSION=$(cat package.json | jq --raw-output '.version');
             - echo $DOCKER_PROJECT_VERSION
             - export DOCKER_IMAGE_COORDINATES="hspconsortium/ehr-simulator:${DOCKER_PROJECT_VERSION}"
@@ -49,12 +42,6 @@ pipelines:
             - echo $AWS_TASK_VERSION
             - echo $(aws ecs update-service --region us-east-1 --cluster sandbox-test --service ehr-simulator-test --task-definition ehr-simulator-test:${AWS_TASK_VERSION})
     master:
-      - step:
-          name: build the source code
-          caches:
-            - node
-          script:
-            - npm install
       - step:
           name: build docker and upload to docker hub
           script:
