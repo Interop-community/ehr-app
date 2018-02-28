@@ -1,6 +1,6 @@
 {
   "name": "ehr-app",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   },
   "config": {
     "port": "3000",
-    "memory": "100"
+    "memory": "100",
+    "operations-name": "ehr-app"
   }
 }
