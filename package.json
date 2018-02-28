@@ -30,6 +30,7 @@
   },
   "config": {
     "port": "3000",
-    "memory": "100"
+    "memory": "100",
+    "operations-name": "ehr-app"
   }
 }
