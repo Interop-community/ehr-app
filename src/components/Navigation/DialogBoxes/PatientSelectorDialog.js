@@ -1,10 +1,30 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import PatientTableTwo from "../../Patient/PatientTableTwo";
 import SearchIcon from 'react-icons/lib/md/search';
 import Pagination from 'material-ui-pagination';
-import {TableRow, TableRowColumn} from "material-ui";
+import {Dialog, TableRow, TableRowColumn, TextField} from "material-ui";
+import moment from "moment";
 
+import PatientTableTwo from "../../Patient/PatientTableTwo";
+import {getPatientName} from "../../../utils";
+
+const PATIENT_PICKER_STYLE = {
+    float: 'right',
+    padding: '18px 5px 5px 5px',
+    cursor: 'pointer',
+    fontSize: '20px'
+};
+const SEARCH_ICON_STYLE = {
+    height: '40px',
+    width: '40px',
+    paddingBottom: '10px',
+    paddingLeft: '3px',
+    paddingRight: '10px'
+};
+const STRINGS = {
+    selectedPatientName: "Select Patient",
+    title: "Select a Patient",
+    nameFilter: "Filter by name"
+};
 
 /**
  * Dialog with action buttons. The actions are passed in as an array of React objects,
@@ -13,167 +33,32 @@ import {TableRow, TableRowColumn} from "material-ui";
  * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
  */
 export default class PatientSelectorDialog extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        if(props.show){
-            this.state = {
-                open: true,
-                selectedPatient: null,
-                selectedPatientName: "Select Patient",
-                title: "Select a Patient",
-                total: 1,
-                display: 1,
-                number: 1,
-                get1stPageOfPatients: 'data?_getpages=5e4304f7-1a0a-4b9d-b29c-676eec0b38f7&_getpagesoffset=0&_count=50&_format=json&_pretty=true&_bundletype=searchset',
-                get2stPageOfPatients: 'data?_getpages=5e4304f7-1a0a-4b9d-b29c-676eec0b38f7&_getpagesoffset=50&_count=50&_format=json&_pretty=true&_bundletype=searchset',
-            };
-        }else{
-            this.state = {
-                open: true,
-                selectedPatient: null,
-                selectedPatientName: "Select Patient",
-                title: "Select a Patient",
-                total: 1,
-                display: 1,
-                number: 1,
-            };
-        }
 
+        this.state = {
+            open: true,
+            selectedPatient: null,
+            selectedPatientName: STRINGS.selectedPatientName,
+            total: 1,
+            display: 1,
+            number: 1,
+            nameFilter: ""
+        };
     }
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
-
-    handleClose = (e) => {
-        this.setState({open: false});
-    };
-
-    handleSelectedPatient = (doc) => {
-        this.setState({selectedPatient: doc});
-        this.setState({selectedPatientName: doc.resource.name[0].family});
-        this.props.handlePatientSelection(doc);
-        this.handleClose();
-
-    };
-
-    handlePageChange(pageNumber) {
-        this.setState({number: pageNumber});
-        var url = this.state.pageUrls[pageNumber-1];
-        if(pageNumber===1){
-            url = "https://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50";
-            if(this.props.refApi.includes("localhost")){
-                url = "http://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50";
-            }
-        }
-
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Authorization': `Bearer ${this.props.bearer}`
-            }
-        })
-            .then( response => response.json() )
-            .then( (responseData) => {
-                const listItems = responseData.entry.map((d) =>
-                    <TableRow key={d.resource.id}>
-                        <TableRowColumn>{d.resource.name[0].family}</TableRowColumn>
-                        <TableRowColumn>{d.resource.birthDate}</TableRowColumn>
-                        <TableRowColumn>{d.resource.gender}</TableRowColumn>
-                    </TableRow>
-                );
-                this.setState({items: listItems});
-                this.setState({patientArray: responseData});
-                console.log(responseData);
-            }).catch(function() {
-            console.log("error");
-        });
-    };
-
-    setupPagination = (results) => {
-        var totalPages = results.total/50;
-        totalPages = Math.ceil(totalPages);
-        this.setState({total: totalPages});
-        this.setState({display: totalPages});
-        var pageUrls = [];
-        for (var i = 0; i < results.link.length; i++) {
-            pageUrls[i] = results.link[i].url
-        }
-        this.setState({pageUrls: pageUrls})
-    };
-
-    componentWillMount(){
-        // let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTY4OTI3OTUsImlhdCI6MTUxNjgwNjM5NSwianRpIjoiYWRjNzIwYjYtOWU2MC00NWVlLTgyODctOGMxNTc4ZGI3NzNjIn0.BW8GTlpfUazXUfg_fLrZaopNUQgt8sDZgWaeExRU0MPclXTFTAw-XLUfUYZubBOavdIwVDrGpq3-DxFYSYptsMnalx_Htf4ESwCUJZgTGtwLSfHBbgbmwGWJ8sgEyyiIN-tfQeNT1EtjzTYS0AFhlfUePLOVebAuSbFT7zdyffw6Snb3hc86mePd1lgSmDCPBZ_11k8WseMxKCnYohROk2lQXuXIUiuTQE1dxtxZ1PPrCzxdVaAu8cR3Z9Qy3BUx2XOYZ-p4Bs7Z4zpfemoADI3nJklQ5s3__E9sDefzGr43btgbDwFZgSOkOj67B1nUO_AKq878DXsLIvqvXVfggg';
-        // let url = 'https://api.hspconsortium.org/hspcdemo/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=5';
-        let token = this.props.bearer;
-        let url = "https://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50";
-        if(this.props.refApi.includes("localhost")){
-            url = "http://" + this.props.refApi + "/" + this.props.sandboxId + "/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50";
-        }
-
-
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then( response => response.json() )
-            .then( (responseData) => {
-                const listItems = responseData.entry.map((d) =>
-                    <TableRow key={d.resource.id}>
-                        <TableRowColumn>{d.resource.name[0].family}</TableRowColumn>
-                        <TableRowColumn>{d.resource.birthDate}</TableRowColumn>
-                        <TableRowColumn>{d.resource.gender}</TableRowColumn>
-                    </TableRow>
-                );
-                this.setState({items: listItems});
-                this.setState({patientArray: responseData});
-                this.setupPagination(responseData);
-            }).catch(function() {
-            console.log("error");
-        });
-
+    componentWillMount() {
+        this.search();
     }
 
     render() {
-        const actions = [
-            <Pagination
-                total = { this.state.total }
-                current = { this.state.number }
-                display = { this.state.display }
-                onChange = { number => this.handlePageChange(number) }
-            />
-
-        ];
-
-        const patientPickerStyle = {
-            float: 'right',
-            padding: '18px 5px 5px 5px',
-            cursor: 'pointer',
-            fontSize: '20px'
-        };
-
-        const searchIconStyle = {
-            height: '40px',
-            width: '40px',
-            paddingBottom: '10px',
-            paddingLeft: '3px',
-            paddingRight: '10px'
-        }
+        const actions = [<Pagination total={this.state.total} current={this.state.number} display={this.state.display} onChange={number => this.handlePageChange(number)}/>];
 
         return (
             <div>
-                <div style={patientPickerStyle} onClick={this.handleOpen}>Select Patient<SearchIcon style={searchIconStyle} /></div>
-                <Dialog
-                    title={this.state.title}
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                >
+                <div style={PATIENT_PICKER_STYLE} onClick={this.toggle}>Select Patient<SearchIcon style={SEARCH_ICON_STYLE}/></div>
+                <Dialog title={STRINGS.title} actions={actions} modal={false} open={this.state.open} onRequestClose={this.toggle}>
+                    <TextField floatingLabelText={STRINGS.nameFilter} onChange={(_e, nameFilter) => this.setState({nameFilter}, this.search.bind(this))}/>
                     <PatientTableTwo
                         setupPagination={this.setupPagination}
                         refApi={this.props.refApi}
@@ -188,4 +73,93 @@ export default class PatientSelectorDialog extends React.Component {
             </div>
         );
     }
+
+    search(nameFilter = this.state.nameFilter) {
+        let token = this.props.bearer;
+        let url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=${nameFilter}&_count=50`;
+
+        fetch(url, {method: 'GET', headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${token}`}})
+            .then(response => response.json())
+            .then((responseData) => {
+                const listItems = responseData.entry.map((d) =>
+                    <TableRow key={d.resource.id}>
+                        <TableRowColumn>{getPatientName(d.resource)}</TableRowColumn>
+                        <TableRowColumn>{(moment(d.resource.birthDate)).format("DD MMM YYYY")}</TableRowColumn>
+                        <TableRowColumn>{d.resource.gender}</TableRowColumn>
+                    </TableRow>
+                );
+                this.setState({items: listItems});
+                this.setState({patientArray: responseData});
+                this.setupPagination(responseData);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    toggle = () => {
+        let state = {open: !this.state.open};
+        if (!state.open) {
+            state = Object.assign(state, {
+                nameFilter: "",
+                items: undefined,
+                patientArray: undefined
+            });
+        } else {
+            this.search();
+        }
+
+        this.setState(state);
+    };
+
+    handleSelectedPatient = (doc) => {
+        this.setState({selectedPatient: doc});
+        this.setState({selectedPatientName: doc.resource.name[0].family});
+        this.props.handlePatientSelection(doc);
+        this.toggle();
+
+    };
+
+    handlePageChange(pageNumber) {
+        this.setState({number: pageNumber});
+        let url = this.state.pageUrls[pageNumber - 1];
+        if (pageNumber === 1) {
+            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50`;
+        }
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Authorization': `Bearer ${this.props.bearer}`
+            }
+        })
+            .then(response => response.json())
+            .then((responseData) => {
+                const listItems = responseData.entry.map((d) =>
+                    <TableRow key={d.resource.id}>
+                        <TableRowColumn>{d.resource.name[0].family}</TableRowColumn>
+                        <TableRowColumn>{d.resource.birthDate}</TableRowColumn>
+                        <TableRowColumn>{d.resource.gender}</TableRowColumn>
+                    </TableRow>
+                );
+                this.setState({items: listItems});
+                this.setState({patientArray: responseData});
+                console.log(responseData);
+            }).catch(function () {
+            console.log("error");
+        });
+    };
+
+    setupPagination = (results) => {
+        let totalPages = results.total / 50;
+        totalPages = Math.ceil(totalPages);
+        this.setState({total: totalPages});
+        this.setState({display: totalPages});
+        let pageUrls = [];
+        for (let i = 0; i < results.link.length; i++) {
+            pageUrls[i] = results.link[i].url
+        }
+        this.setState({pageUrls: pageUrls})
+    };
 }

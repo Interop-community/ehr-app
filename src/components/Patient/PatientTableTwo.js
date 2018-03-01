@@ -11,7 +11,7 @@ import {
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
  */
 export default class PatientTableTwo extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             fixedHeader: true,
@@ -23,40 +23,28 @@ export default class PatientTableTwo extends Component {
             enableSelectAll: false,
             deselectOnClickaway: true,
             showCheckboxes: false,
-            height: '300px',
+            height: '300px'
         };
     }
 
 
     handleToggle = (selectedRow) => {
-        this.props.handleSelectedPatient(this.props.patientArray != null?this.props.patientArray.entry[selectedRow[0]]:this.state.patientArray.entry[selectedRow[0]]);
+        this.props.handleSelectedPatient(this.props.patientArray != null ? this.props.patientArray.entry[selectedRow[0]] : this.state.patientArray.entry[selectedRow[0]]);
     };
 
     render() {
         return (
             <div>
-                <Table
-                    height={this.state.height}
-                    fixedHeader={this.state.fixedHeader}
-                    fixedFooter={this.state.fixedFooter}
-                    onRowSelection={this.handleToggle}
-                >
-                    <TableHeader
-                        displaySelectAll={this.state.showCheckboxes}
-
-                    >
+                <Table height={this.state.height} fixedHeader={this.state.fixedHeader} fixedFooter={this.state.fixedFooter} onRowSelection={this.handleToggle}>
+                    <TableHeader displaySelectAll={this.state.showCheckboxes}>
                         <TableRow>
-                            <TableHeaderColumn tooltip="The Name">Name</TableHeaderColumn>
-                            <TableHeaderColumn tooltip="The Birth Date">Birth Date</TableHeaderColumn>
-                            <TableHeaderColumn tooltip="The Status">Gender</TableHeaderColumn>
+                            <TableHeaderColumn>Name</TableHeaderColumn>
+                            <TableHeaderColumn>Birth Date</TableHeaderColumn>
+                            <TableHeaderColumn>Gender</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
-                    <TableBody
-                        displayRowCheckbox={this.state.showCheckboxes}
-                        deselectOnClickaway={this.state.deselectOnClickaway}
-                        showRowHover={this.state.showRowHover}
-                        stripedRows={this.state.stripedRows}
-                    >
+                    <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway}
+                               showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
                         {this.props.items}
                     </TableBody>
                 </Table>
