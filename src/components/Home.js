@@ -4,8 +4,8 @@ import {Paper} from "material-ui";
 import ShowApp from "./ShowApp";
 import PatientView from "./Patient/PatientView";
 
-export default class Home extends React.Component{
-    constructor(props){
+export default class Home extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             bearer: props.match.params.bearer,
@@ -30,44 +30,41 @@ export default class Home extends React.Component{
     handlePersonaSelection = (e) => {
         this.setState({selectedPersona: e});
         this.setState({selectedPersonaName: e.personaName})
-    }
+    };
 
     handlePatientSelection = (e) => {
         this.setState({selectedPatient: e});
         this.setState({selectedPatientName: e.resource.name[0].family})
         this.setState({selectedPatientId: e.resource.id})
-    }
+    };
 
     handleAppMenu = (e) => {
         this.setState({currentApp: e});
         this.setState({currentAppLaunchUri: e[0].launchUri});
         this.setState({currentAppName: e[0].authClient.clientName});
         //make json obj
-        var text = '{ "client_id":"' + e[0].authClient.clientName+ '","parameters":{"patient":"' + this.state.selectedPatientId + '","need_patient_banner":false}}';
-        var obj = JSON.parse(text);
+        let text = '{ "client_id":"' + e[0].authClient.clientName + '","parameters":{"patient":"' + this.state.selectedPatientId + '","need_patient_banner":false}}';
+        let obj = JSON.parse(text);
         //make call to get launch code
-        var launchCodeUri = this.state.getLaunchCodeUrl;
-        if(this.state.refApi.includes("localhost")){
+        let launchCodeUri = this.state.getLaunchCodeUrl;
+        if (this.state.refApi.includes("localhost")) {
             launchCodeUri = this.state.getLocalLaunchCodeUrl;
         }
         fetch(launchCodeUri, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Authorization': `Bearer ${this.state.bearer}`
-            },
+            headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${this.state.bearer}`},
             body: JSON.stringify(obj)
         })
-            .then( response => response.json() )
+            .then(response => response.json())
             .then((responseData) => {
                 this.setState({url: e[0].launchUri + "?iss=https://" + this.state.refApi + "/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
-                if(this.state.refApi.includes("localhost")){
+                if (this.state.refApi.includes("localhost")) {
                     this.setState({url: e[0].launchUri + "?iss=http://" + this.state.refApi + "/" + e[0].sandbox.sandboxId + "/data&launch=" + responseData.launch_id});
                 }
             })
-    }
+    };
 
-    render(){
+    render() {
 
         const divStyle = {
             float: 'left',
@@ -80,7 +77,7 @@ export default class Home extends React.Component{
             float: 'left',
         };
 
-        return(
+        return (
             <div>
                 <PatientView
                     refApi={this.state.refApi}
@@ -96,6 +93,7 @@ export default class Home extends React.Component{
                 />
                 <Paper style={divStyle}>
                     <AppMenu
+                        patient={this.state.selectedPatient}
                         handleAppMenu={this.handleAppMenu}
                         bearer={this.props.match.params.bearer}
                         sandboxApi={this.props.match.params.sandboxApi}

@@ -78,7 +78,7 @@ pipelines:
             - cd ci
             - . ci-0-set-properties.sh
             - . ci-5-aws-service-update.sh
-    feature/*:
+    _feature/*:
       - step:
           name: build the source code
           script:
