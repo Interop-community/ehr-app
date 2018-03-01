@@ -4,6 +4,17 @@ import {Paper} from "material-ui";
 import ShowApp from "./ShowApp";
 import PatientView from "./Patient/PatientView";
 
+const divStyle = {
+    float: 'left',
+    backgroundColor: '#4D5B66',
+    width: '185px',
+    height: '800px',
+};
+
+const appStyle = {
+    float: 'left',
+};
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -65,18 +76,6 @@ export default class Home extends React.Component {
     };
 
     render() {
-
-        const divStyle = {
-            float: 'left',
-            backgroundColor: '#4D5B66',
-            width: '185px',
-            height: '800px',
-        };
-
-        const appStyle = {
-            float: 'left',
-        };
-
         return (
             <div>
                 <PatientView
@@ -100,11 +99,8 @@ export default class Home extends React.Component {
                         sandboxId={this.props.match.params.sandboxId}
                     />
                 </Paper>
-
                 <Paper style={appStyle}>
-                    <ShowApp
-                        url={this.state.url}
-                    />
+                    <ShowApp patient={this.state.selectedPatient} url={this.state.url}/>
                 </Paper>
             </div>
         );

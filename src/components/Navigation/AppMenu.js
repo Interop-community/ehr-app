@@ -80,8 +80,6 @@ class AppMenu extends Component {
         if (this.props.sandboxApi.includes("localhost")) {
             url = 'http://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId;
         }
-        // let token = this.props.bearer;
-        // let url = 'https://' + this.props.sandboxApi + '/app?sandboxId=' + this.props.sandboxId;
 
         fetch(url, {
             method: 'GET',
