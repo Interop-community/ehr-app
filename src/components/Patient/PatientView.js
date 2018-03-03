@@ -1,7 +1,10 @@
 import React, {PureComponent} from "react"
 import PersonIcon from 'react-icons/lib/md/person';
 import PatientSelectorDialog from "../Navigation/DialogBoxes/PatientSelectorDialog";
+import {getPatientName} from '../../utils';
 import moment from "moment";
+
+import './Patient.css';
 
 const patientDivStyle = {
     float: 'left',
@@ -38,10 +41,10 @@ class PatientView extends PureComponent {
                 {this.props.patient
                     ? <div>
                         <div style={infoTitleStyle}>Patient:</div>
-                        <div style={infoStyle}>{this.props.patient.resource.name[0].family}</div>
-                        <div style={infoTitleStyle}>gender:</div>
+                        <div style={infoStyle}>{getPatientName(this.props.patient.resource)}</div>
+                        <div style={infoTitleStyle}>Gender:</div>
                         <div style={infoStyle}>{this.props.patient.resource.gender}</div>
-                        <div style={infoTitleStyle}>dob:</div>
+                        <div style={infoTitleStyle}>DOB:</div>
                         <div style={infoStyle}>{moment(this.props.patient.resource.birthDate).format("DD MMM YYYY")}</div>
                         <div style={infoTitleStyle}>MRN:</div>
                         <div style={infoStyle}>{mrn}</div>

@@ -82,7 +82,7 @@ export default class PatientSelectorDialog extends React.Component {
             .then(response => response.json())
             .then((responseData) => {
                 const listItems = responseData.entry.map((d) =>
-                    <TableRow key={d.resource.id}>
+                    <TableRow key={d.resource.id} className="patient-table-row">
                         <TableRowColumn>{getPatientName(d.resource)}</TableRowColumn>
                         <TableRowColumn>{(moment(d.resource.birthDate)).format("DD MMM YYYY")}</TableRowColumn>
                         <TableRowColumn>{d.resource.gender}</TableRowColumn>
