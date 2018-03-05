@@ -101,7 +101,7 @@ export default class Home extends React.Component {
             .then(response => response.json())
             .then((loadedApps) => {
                 loadedApps = loadedApps || [];
-                loadedApps.push(biliApp);
+                // loadedApps.push(biliApp);
                 this.setState({loadedApps})
             });
     }
