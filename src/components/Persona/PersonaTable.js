@@ -12,7 +12,7 @@ import {
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
  */
 export default class PersonaTable extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             fixedHeader: true,
@@ -37,12 +37,9 @@ export default class PersonaTable extends Component {
     };
 
 
-
-    componentWillMount(){
-        // let token = 'eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJzYW5kX21hbiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoLmhzcGNvbnNvcnRpdW0ub3JnXC8iLCJleHAiOjE1MTY4OTI3OTUsImlhdCI6MTUxNjgwNjM5NSwianRpIjoiYWRjNzIwYjYtOWU2MC00NWVlLTgyODctOGMxNTc4ZGI3NzNjIn0.BW8GTlpfUazXUfg_fLrZaopNUQgt8sDZgWaeExRU0MPclXTFTAw-XLUfUYZubBOavdIwVDrGpq3-DxFYSYptsMnalx_Htf4ESwCUJZgTGtwLSfHBbgbmwGWJ8sgEyyiIN-tfQeNT1EtjzTYS0AFhlfUePLOVebAuSbFT7zdyffw6Snb3hc86mePd1lgSmDCPBZ_11k8WseMxKCnYohROk2lQXuXIUiuTQE1dxtxZ1PPrCzxdVaAu8cR3Z9Qy3BUx2XOYZ-p4Bs7Z4zpfemoADI3nJklQ5s3__E9sDefzGr43btgbDwFZgSOkOj67B1nUO_AKq878DXsLIvqvXVfggg';
+    componentWillMount() {
         let token = this.state.bearer
-        // let url = 'https://sandbox-api.hspconsortium.org/userPersona?sandboxId=hspcdemo'
-        let url = "https://" + this.state.sandboxApi + "/userPersona?sandboxId=" + this.state.sandboxId
+        let url = "https://" + this.state.sandboxApi + "/userPersona?sandboxId=" + this.state.sandboxId;
 
         fetch(url, {
             method: 'GET',
@@ -51,7 +48,7 @@ export default class PersonaTable extends Component {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then( response => response.json() )
+            .then(response => response.json())
             .then((responseData) => {
                 var trimmedList = responseData.filter(function (rd) {
                     return (rd.resourceUrl.includes("Practitioner"));
@@ -73,27 +70,16 @@ export default class PersonaTable extends Component {
     render() {
         return (
             <div>
-                <Table
-                    height={this.state.height}
-                    fixedHeader={this.state.fixedHeader}
-                    fixedFooter={this.state.fixedFooter}
-                    onRowSelection={this.handleToggle}
-                >
-                    <TableHeader
-                        displaySelectAll={this.state.showCheckboxes}
-                    >
+                <Table height={this.state.height} fixedHeader={this.state.fixedHeader} fixedFooter={this.state.fixedFooter} onRowSelection={this.handleToggle}>
+                    <TableHeader displaySelectAll={this.state.showCheckboxes}>
                         <TableRow>
                             <TableHeaderColumn tooltip="Display Name">Display Name</TableHeaderColumn>
                             <TableHeaderColumn tooltip="User Id">User Id</TableHeaderColumn>
                             <TableHeaderColumn tooltip="FHIR Resource">FHIR Resource</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
-                    <TableBody
-                        displayRowCheckbox={this.state.showCheckboxes}
-                        deselectOnClickaway={this.state.deselectOnClickaway}
-                        showRowHover={this.state.showRowHover}
-                        stripedRows={this.state.stripedRows}
-                    >
+                    <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway}
+                               showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
                         {this.state.personaItems}
                     </TableBody>
                 </Table>

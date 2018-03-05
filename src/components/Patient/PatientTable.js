@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 /**
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
