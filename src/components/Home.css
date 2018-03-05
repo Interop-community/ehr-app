@@ -8,6 +8,7 @@
     padding: 2rem;
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .app-card {
@@ -19,6 +20,7 @@
     background-color: #f0f0f0 !important;
     margin: 0 1rem;
     transition: all .2s ease-in-out;
+    height: 230px; margin: 1rem 1rem;
 }
 
 .app-card:hover {
