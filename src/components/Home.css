@@ -1,5 +1,5 @@
 .ehr-content-wrapper {
-    height: calc(100% - 82px);
+    height: calc(100% - 62px);
     width: calc(100% - 185px);
     overflow: auto;
 }

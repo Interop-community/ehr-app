@@ -2,17 +2,18 @@ import React from 'react';
 import AppMenu from "./Navigation/AppMenu";
 import {Paper, Card, Divider, CardText} from "material-ui";
 import ShowApp from "./ShowApp";
-import PatientView from "./Patient/PatientView";
-import PersonaView from "./Persona/PersonaTable";
-import {call, setPersonaCookie, removePersonaCookie, getPersonaCookie} from "../utils";
+import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
+import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
+import {call, setPersonaCookie} from "../utils";
 
 import './Home.css';
+import HeaderBar from "./Navigation/Header/HeaderBar";
 
 const divStyle = {
     float: 'left',
     backgroundColor: '#4D5B66',
     width: '185px',
-    height: 'calc(100vh - 82px)',
+    height: 'calc(100vh - 60px)',
     borderRadius: 0
 };
 
@@ -28,6 +29,9 @@ export default class Home extends React.Component {
             selectedPersona: null,
             selectedPatient: null,
             listApps: null,
+
+            showPatientSelector: true,
+            showPersonaSelector: true,
 
             launchCodeUrl: `${window.location.protocol}//${props.match.params.refApi}/${props.match.params.sandboxId}/data/_services/smart/Launch`,
             personaAuthenticationUrl: `${window.location.protocol}//${props.match.params.sandboxApi}/userPersona/authenticate`,
@@ -47,19 +51,24 @@ export default class Home extends React.Component {
         // Reload the application with the new context
         this.state.selectedPatient && nextState.selectedPatient && this.state.selectedPatient.resource.id !== nextState.selectedPatient.resource.id &&
         this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id);
+        this.state.selectedPersona && nextState.selectedPersona && this.state.selectedPersona.fhirId !== nextState.selectedPersona.fhirId &&
+        this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
     }
 
     render() {
         return <div className="home-screen-wrapper">
-            {!this.state.selectedPersona &&
-            <PersonaView refApi={this.state.refApi} patient={this.state.selectedPatient}
-                        bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                        handleSelectedDoc={e => this.setState({selectedPersona: e})}
-            />}
+            <HeaderBar patient={this.state.selectedPatient} persona={this.state.selectedPersona} togglePatientSelector={() => this.setState({showPatientSelector: true})}
+                       togglePersonaSelector={() => this.setState({showPersonaSelector: true})}/>
+            <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector}
+                                   bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
+                                   handlePersonaSelection={e => this.setState({selectedPersona: e})} onClose={() => this.setState({showPersonaSelector: false})}
+            />
             {this.state.selectedPersona &&
-            <PatientView refApi={this.state.refApi} patient={this.state.selectedPatient}
-                         bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                         handlePatientSelection={e => this.setState({selectedPatient: e, selectedPatientId: e.resource.id})}
+            <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
+                                   bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
+                                   open={this.state.showPatientSelector}
+                                   onClose={() => this.setState({showPatientSelector: false})}
+                                   handlePatientSelection={e => this.setState({selectedPatient: e, selectedPatientId: e.resource.id})}
             />}
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
@@ -76,7 +85,7 @@ export default class Home extends React.Component {
         return this.state.loadedApps.map(d =>
             <Card className="app-card" key={d.id} onClick={() => this.handleAppMenu(d)}>
                 <CardText className="card-body">
-                    <img src={d.logoUri}/>
+                    <img src={d.logoUri} alt="logo"/>
                     <Divider/>
                     <span className="card-title">{d.authClient.clientName}</span>
                 </CardText>
@@ -84,12 +93,12 @@ export default class Home extends React.Component {
         );
     }
 
-    handleAppMenu = (e, patient = this.state.selectedPatientId) => {
+    handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
         this.setState({currentApp: e, url: undefined});
 
         let credentials = {
-            username: this.state.selectedPersona.personaUserId,
-            password: this.state.selectedPersona.password
+            username: persona.personaUserId,
+            password: persona.password
         };
         let body = {
             client_id: e.authClient.clientName,
