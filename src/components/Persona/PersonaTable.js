@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 /**
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
@@ -38,8 +31,8 @@ export default class PersonaTable extends Component {
 
 
     componentWillMount() {
-        let token = this.state.bearer
-        let url = "https://" + this.state.sandboxApi + "/userPersona?sandboxId=" + this.state.sandboxId;
+        let token = this.state.bearer;
+        let url = `${window.location.protocol}//${this.state.sandboxApi}/userPersona?sandboxId=${this.state.sandboxId}`;
 
         fetch(url, {
             method: 'GET',
