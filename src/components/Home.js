@@ -63,13 +63,12 @@ export default class Home extends React.Component {
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    handlePersonaSelection={e => this.setState({selectedPersona: e})} onClose={() => this.setState({showPersonaSelector: false})}
             />
-            {this.state.selectedPersona &&
             <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    open={this.state.showPatientSelector}
                                    onClose={() => this.setState({showPatientSelector: false})}
                                    handlePatientSelection={e => this.setState({selectedPatient: e, selectedPatientId: e.resource.id})}
-            />}
+            />
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
                                                    selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined}/>}
@@ -96,10 +95,6 @@ export default class Home extends React.Component {
     handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
         this.setState({currentApp: e, url: undefined});
 
-        let credentials = {
-            username: persona.personaUserId,
-            password: persona.password
-        };
         let body = {
             client_id: e.authClient.clientName,
             parameters: {
@@ -108,17 +103,30 @@ export default class Home extends React.Component {
             }
         };
 
+
         call(this.state.launchCodeUrl, this.state.bearer, 'POST', body)
             .then(data => {
                 let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
                 this.setState({url});
+                try {
+                    if (persona.personaUserId != null) {
+                        let credentials = {
+                            username: persona.personaUserId,
+                            password: persona.password
+                        };
 
-                call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
-                    .then(personaAuthResult => {
-                        setPersonaCookie(personaAuthResult.jwt);
-                    }).catch(function (error) {
-                    console.log(error);
-                });
+                        call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
+                            .then(personaAuthResult => {
+                                setPersonaCookie(personaAuthResult.jwt);
+                            }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                }catch(e){
+                    console.log("There is no persona.")
+                }
             });
+
+
     };
 }

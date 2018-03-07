@@ -29,7 +29,7 @@ export default class PersonaSelectorDialog extends React.Component {
     render() {
         return (
             <div>
-                <Dialog title="Select A Practitioner Persona" modal={true} open={this.props.open} onRequestClose={() => this.props.onClose && this.props.onClose()}>
+                <Dialog title="Select A Practitioner Persona" modal={false} open={this.props.open} onRequestClose={() => this.props.onClose && this.props.onClose()}>
                     <PersonaTable
                         handleSelectedDoc={this.handleSelectedDoc}
                         sandboxId={this.state.sandboxId}
