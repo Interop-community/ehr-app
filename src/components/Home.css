@@ -1,6 +1,6 @@
 .ehr-content-wrapper {
     height: calc(100% - 62px);
-    width: calc(100% - 185px);
+    width: calc(100% - 224px);
     overflow: auto;
 }
 
@@ -21,6 +21,7 @@
     margin: 0 1rem;
     transition: all .2s ease-in-out;
     height: 230px; margin: 1rem 1rem;
+    min-width: 230px;
 }
 
 .app-card:hover {

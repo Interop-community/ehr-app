@@ -12,7 +12,7 @@ import HeaderBar from "./Navigation/Header/HeaderBar";
 const divStyle = {
     float: 'left',
     backgroundColor: '#4D5B66',
-    width: '185px',
+    width: '224px',
     height: 'calc(100vh - 60px)',
     borderRadius: 0
 };

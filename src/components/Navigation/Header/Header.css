@@ -15,7 +15,14 @@
 
 .header-persona-wrapper, .header-patient-wrapper {
     display: inline-block;
-    width: 50%;
+}
+
+.header-patient-wrapper {
+    width: 70%;
+}
+
+.header-persona-wrapper {
+    width: 30%;
 }
 
 .patient-icon-wrapper, .persona-icon-wrapper {
@@ -87,5 +94,5 @@
 
 .header-persona-info {
     float: right;
-    margin-left: 1rem;
+    margin-right: 1rem;
 }
