@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "ehr-app-test",
-      "image": "hspconsortium/ehr-app:0.6.4",
+      "image": "hspconsortium/ehr-app:0.6.5-SNAPSHOT",
       "cpu": 0,
       "portMappings": [
         {
