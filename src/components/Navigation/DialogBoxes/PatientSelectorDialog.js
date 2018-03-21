@@ -4,7 +4,7 @@ import Pagination from 'material-ui-pagination';
 import {Dialog, TableRow, TableRowColumn, TextField} from "material-ui";
 import moment from "moment";
 
-import PatientTableTwo from "../../Patient/PatientTableTwo";
+import PatientTable from "../../Patient/PatientTable";
 import {getPatientName} from "../../../utils";
 
 const PATIENT_PICKER_STYLE = {
@@ -37,7 +37,6 @@ export default class PatientSelectorDialog extends React.Component {
         super(props);
 
         this.state = {
-            open: true,
             selectedPatient: null,
             selectedPatientName: STRINGS.selectedPatientName,
             total: 1,
@@ -56,10 +55,9 @@ export default class PatientSelectorDialog extends React.Component {
 
         return (
             <div>
-                <div style={PATIENT_PICKER_STYLE} onClick={this.toggle}>Select Patient<SearchIcon style={SEARCH_ICON_STYLE}/></div>
-                <Dialog title={STRINGS.title} actions={actions} modal={false} open={this.state.open} onRequestClose={this.toggle}>
+                <Dialog title={STRINGS.title} actions={actions} modal={false} open={this.props.open} onRequestClose={this.toggle}>
                     <TextField floatingLabelText={STRINGS.nameFilter} onChange={(_e, nameFilter) => this.setState({nameFilter}, this.search.bind(this))}/>
-                    <PatientTableTwo
+                    <PatientTable
                         setupPagination={this.setupPagination}
                         refApi={this.props.refApi}
                         handleSelectedPatient={this.handleSelectedPatient}
@@ -98,18 +96,7 @@ export default class PatientSelectorDialog extends React.Component {
     }
 
     toggle = () => {
-        let state = {open: !this.state.open};
-        if (!state.open) {
-            state = Object.assign(state, {
-                nameFilter: "",
-                items: undefined,
-                patientArray: undefined
-            });
-        } else {
-            this.search();
-        }
-
-        this.setState(state);
+        this.props.onClose && this.props.onClose();
     };
 
     handleSelectedPatient = (doc) => {

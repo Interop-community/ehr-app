@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+
+import "./Persona.css";
 
 /**
  * A more complex example, allowing the table height to be set, and key boolean properties to be toggled.
@@ -33,13 +28,14 @@ export default class PersonaTable extends Component {
     }
 
     handleToggle = (selectedRow) => {
-        this.props.handleSelectedDoc(this.state.personaArray[selectedRow[0]]);
+        this.props.handleSelectedDoc && this.props.handleSelectedDoc(this.state.personaArray[selectedRow[0]]);
+        this.props.close && this.props.close();
     };
 
 
     componentWillMount() {
-        let token = this.state.bearer
-        let url = "https://" + this.state.sandboxApi + "/userPersona?sandboxId=" + this.state.sandboxId;
+        let token = this.state.bearer;
+        let url = `${window.location.protocol}//${this.state.sandboxApi}/userPersona?sandboxId=${this.state.sandboxId}`;
 
         fetch(url, {
             method: 'GET',
@@ -54,7 +50,7 @@ export default class PersonaTable extends Component {
                     return (rd.resourceUrl.includes("Practitioner"));
                 });
                 const listItems = trimmedList.map((d) =>
-                    <TableRow key={d.id}>
+                    <TableRow key={d.id} className="persona-table-row">
                         <TableRowColumn>{d.personaName}</TableRowColumn>
                         <TableRowColumn>{d.personaUserId}</TableRowColumn>
                         <TableRowColumn>{d.resourceUrl}</TableRowColumn>
