@@ -71,7 +71,6 @@
 .header-persona-info > span:first-of-type {
     color: lightgray;
     text-shadow: 0 1px 1px #000;
-    margin-right: 0.5rem;
 }
 
 .header-patient-info > span:last-of-type {

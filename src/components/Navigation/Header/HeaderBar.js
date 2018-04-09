@@ -4,6 +4,8 @@ import moment from "moment";
 import PersonIcon from "material-ui/svg-icons/social/person";
 import PersonPinIcon from "material-ui/svg-icons/social/person-outline";
 import HospitalIcon from "material-ui/svg-icons/maps/local-hospital";
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faUserMd } from '@fortawesome/fontawesome-free-solid';
 import SearchIcon from "material-ui/svg-icons/action/search";
 
 import "./Header.css";
@@ -24,7 +26,6 @@ class HeaderBar extends Component {
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
                 <div className="patient-icon-wrapper" onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
-                    <SearchIcon style={{width: "35px", height: "35px", position: "absolute", bottom: "0", right: "0", color: "lightgray"}}/>
                     <PersonIcon style={{width: "60px", height: "60px"}}/>
                 </div>
                 {this.props.patient
@@ -60,9 +61,7 @@ class HeaderBar extends Component {
             </div>
             <div className="header-persona-wrapper">
                 <div className="persona-icon-wrapper" onClick={() => this.props.togglePersonaSelector && this.props.togglePersonaSelector()}>
-                    <SearchIcon style={{width: "35px", height: "35px", position: "absolute", bottom: "0", right: "0", color: "lightgray"}}/>
-                    <HospitalIcon style={{width: "20px", height: "20px", position: "absolute", bottom: "5px", left: "5px", color: "lightgray"}}/>
-                    <PersonPinIcon style={{width: "60px", height: "60px"}}/>
+                    <FontAwesomeIcon icon={faUserMd} style={{width: "45px", height: "45px", marginLeft: "8px", marginTop: "5px", color: "rgb(255, 255, 255)"}}/>
                 </div>
                 {this.props.persona
                     ? <div className="header-persona-info-wrapper">
