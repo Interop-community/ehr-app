@@ -26,7 +26,6 @@ class HeaderBar extends Component {
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
                 <div className="patient-icon-wrapper" onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
-                    <SearchIcon style={{width: "35px", height: "35px", position: "absolute", bottom: "0", right: "0", color: "lightgray"}}/>
                     <PersonIcon style={{width: "60px", height: "60px"}}/>
                 </div>
                 {this.props.patient
@@ -62,7 +61,7 @@ class HeaderBar extends Component {
             </div>
             <div className="header-persona-wrapper">
                 <div className="persona-icon-wrapper" onClick={() => this.props.togglePersonaSelector && this.props.togglePersonaSelector()}>
-                    <FontAwesomeIcon icon={faUserMd} style={{width: "45px", height: "45px", marginTop: "5px", color: "rgb(255, 255, 255)"}}/>
+                    <FontAwesomeIcon icon={faUserMd} style={{width: "45px", height: "45px", marginLeft: "8px", marginTop: "5px", color: "rgb(255, 255, 255)"}}/>
                 </div>
                 {this.props.persona
                     ? <div className="header-persona-info-wrapper">
