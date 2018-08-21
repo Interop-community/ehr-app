@@ -86,7 +86,7 @@ export default class Home extends React.Component {
                 <CardText className="card-body">
                     <img src={d.logoUri} alt="logo"/>
                     <Divider/>
-                    <span className="card-title">{d.authClient.clientName}</span>
+                    <span className="card-title">{d.clientName}</span>
                 </CardText>
             </Card>
         );
@@ -96,7 +96,7 @@ export default class Home extends React.Component {
         this.setState({currentApp: e, url: undefined});
 
         let body = {
-            client_id: e.authClient.clientName,
+            client_id: e.clientName,
             parameters: {
                 patient: patient,
                 need_patient_banner: false
