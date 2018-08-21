@@ -18,7 +18,7 @@ class AppMenu extends Component {
 
     componentDidMount() {
         const listItems = this.props.apps.map((d) =>
-            <MenuItem key={d.id} primaryText={<span style={PRIMARY_TEXT_STYLE}>{d.authClient.clientName}</span>} style={MENU_ITEM_STYLE}
+            <MenuItem key={d.id} primaryText={<span style={PRIMARY_TEXT_STYLE}>{d.clientName}</span>} style={MENU_ITEM_STYLE}
                       value={d.id} onClick={() => this.updateMenu(d.id)} innerDivStyle={INNER_DIV_STYLE}/>);
         this.setState({items: listItems});
     }
