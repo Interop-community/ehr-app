@@ -85,7 +85,7 @@ export default class Home extends React.Component {
             <Card className="app-card" key={d.id} onClick={() => this.handleAppMenu(d)}>
                 <CardText className="card-body">
                     <img src={d.logoUri} alt="logo"/>
-                    <Divider/>
+                    <Divider style={{"backgroundColor": "#f0f0f0"}}/>
                     <span className="card-title">{d.clientName}</span>
                 </CardText>
             </Card>
