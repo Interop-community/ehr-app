@@ -84,8 +84,8 @@ export default class Home extends React.Component {
         return this.state.loadedApps.map(d =>
             <Card className="app-card" key={d.id} onClick={() => this.handleAppMenu(d)}>
                 <CardText className="card-body">
-                    <img src={d.logoUri} alt="logo"/>
-                    <Divider/>
+                    <img style={{"max-height": "160px"}} src={d.logoUri || 'https://content.hspconsortium.org/images/hspc/icon/HSPCSandboxNoIconApp-512.png'} alt="logo"/>
+                    <Divider style={{"backgroundColor": "#f0f0f0"}}/>
                     <span className="card-title">{d.clientName}</span>
                 </CardText>
             </Card>
