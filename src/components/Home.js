@@ -1,10 +1,10 @@
 import React from 'react';
 import AppMenu from "./Navigation/AppMenu";
-import {Paper, Card, Divider, CardText} from "material-ui";
+import { Paper, Card, Divider, CardText } from "material-ui";
 import ShowApp from "./ShowApp";
 import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
-import {call, setPersonaCookie} from "../utils";
+import { call, setPersonaCookie } from "../utils";
 
 import './Home.css';
 import HeaderBar from "./Navigation/Header/HeaderBar";
@@ -18,7 +18,7 @@ const divStyle = {
 };
 
 export default class Home extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             bearer: props.match.params.bearer,
@@ -30,8 +30,8 @@ export default class Home extends React.Component {
             selectedPatient: null,
             listApps: null,
 
-            showPatientSelector: true,
-            showPersonaSelector: true,
+            showPatientSelector: !props.match.params.patientId,
+            showPersonaSelector: !props.match.params.userId,
 
             launchCodeUrl: `${window.location.protocol}//${props.match.params.refApi}/${props.match.params.sandboxId}/data/_services/smart/Launch`,
             personaAuthenticationUrl: `${window.location.protocol}//${props.match.params.sandboxApi}/userPersona/authenticate`,
@@ -39,53 +39,75 @@ export default class Home extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentWillMount () {
+        let params = this.props.match.params;
+
         call(this.state.registeredAppsUrl, this.state.bearer)
             .then(loadedApps => {
                 loadedApps = loadedApps || [];
-                this.setState({loadedApps})
+                let state = { loadedApps };
+                if (params.appId) {
+                    state.currentApp = loadedApps.find(i => i.id == params.appId);
+                }
+                this.setState(state);
+            });
+
+        params.userId &&
+        call(`${window.location.protocol}//${params.sandboxApi}/userPersona?sandboxId=${params.sandboxId}`, this.state.bearer)
+            .then(users => {
+                let selectedPersona = users.find(i => i.id == params.userId);
+                this.setState({ selectedPersona });
+            });
+
+        params.patientId &&
+        call(`${window.location.protocol}//${params.refApi}/${params.sandboxId}/data/Patient/${params.patientId}`, this.state.bearer)
+            .then(patient => {
+                this.setState({ selectedPatient: {resource: patient}, selectedPatientId: patient.id });
             });
     }
 
-    componentWillUpdate(np, nextState) {
+    componentWillUpdate (np, nextState) {
         // Reload the application with the new context
         this.state.selectedPatient && nextState.selectedPatient && this.state.selectedPatient.resource.id !== nextState.selectedPatient.resource.id &&
         this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id);
         this.state.selectedPersona && nextState.selectedPersona && this.state.selectedPersona.fhirId !== nextState.selectedPersona.fhirId &&
         this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
+
+        this.state.selectedPatient && nextState.selectedPatient && !this.state.selectedPersona && nextState.selectedPersona &&
+        this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
     }
 
-    render() {
+    render () {
         return <div className="home-screen-wrapper">
-            <HeaderBar patient={this.state.selectedPatient} persona={this.state.selectedPersona} togglePatientSelector={() => this.setState({showPatientSelector: true})}
-                       togglePersonaSelector={() => this.setState({showPersonaSelector: true})}/>
+            <HeaderBar patient={this.state.selectedPatient} persona={this.state.selectedPersona} togglePatientSelector={() => this.setState({ showPatientSelector: true })}
+                       togglePersonaSelector={() => this.setState({ showPersonaSelector: true })}/>
             <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                                   handlePersonaSelection={e => this.setState({selectedPersona: e})} onClose={() => this.setState({showPersonaSelector: false})}
+                                   handlePersonaSelection={e => this.setState({ selectedPersona: e })} onClose={() => this.setState({ showPersonaSelector: false })}
             />
             <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    open={this.state.showPatientSelector}
-                                   onClose={() => this.setState({showPatientSelector: false})}
-                                   handlePatientSelection={e => this.setState({selectedPatient: e, selectedPatientId: e.resource.id})}
+                                   onClose={() => this.setState({ showPatientSelector: false })}
+                                   handlePatientSelection={e => this.setState({ selectedPatient: e, selectedPatientId: e.resource.id })}
             />
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
                                                    selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined}/>}
             </Paper>
             {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">{this.buildAppCards()}</div>}
-            {this.state.currentApp && <div className="ehr-content-wrapper">
+            {this.state.selectedPatient && this.state.selectedPersona && this.state.currentApp && <div className="ehr-content-wrapper">
                 <ShowApp patient={this.state.selectedPatient} url={this.state.url}/>
             </div>}
         </div>;
     }
 
-    buildAppCards() {
+    buildAppCards () {
         return this.state.loadedApps.map(d =>
             <Card className="app-card" key={d.id} onClick={() => this.handleAppMenu(d)}>
                 <CardText className="card-body">
-                    <img style={{"max-height": "160px"}} src={d.logoUri || 'https://content.hspconsortium.org/images/hspc/icon/HSPCSandboxNoIconApp-512.png'} alt="logo"/>
-                    <Divider style={{"backgroundColor": "#f0f0f0"}}/>
+                    <img style={{ "max-height": "160px" }} src={d.logoUri || 'https://content.hspconsortium.org/images/hspc/icon/HSPCSandboxNoIconApp-512.png'} alt="logo"/>
+                    <Divider style={{ "backgroundColor": "#f0f0f0" }}/>
                     <span className="card-title">{d.clientName}</span>
                 </CardText>
             </Card>
@@ -93,7 +115,8 @@ export default class Home extends React.Component {
     }
 
     handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
-        this.setState({currentApp: e, url: undefined});
+        console.log('-------------------');
+        this.setState({ currentApp: e, url: undefined });
 
         let body = {
             client_id: e.clientName,
@@ -107,7 +130,7 @@ export default class Home extends React.Component {
         call(this.state.launchCodeUrl, this.state.bearer, 'POST', body)
             .then(data => {
                 let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
-                this.setState({url});
+                this.setState({ url });
                 try {
                     if (persona.personaUserId != null) {
                         let credentials = {
@@ -122,7 +145,7 @@ export default class Home extends React.Component {
                             console.log(error);
                         });
                     }
-                }catch(e){
+                } catch (e) {
                     console.log("There is no persona.")
                 }
             });
