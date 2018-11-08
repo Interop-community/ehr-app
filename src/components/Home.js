@@ -20,49 +20,63 @@ const divStyle = {
 export default class Home extends React.Component {
     constructor (props) {
         super(props);
+
+        let cookieData = this.getCookieData();
+        let params = {};
+        cookieData.encounter && (params.encounter = cookieData.encounter);
+        cookieData.location && (params.location = cookieData.location);
+        cookieData.resource && (params.resource = cookieData.resource);
+        cookieData.smartStyleUrl && (params.smartStyleUrl = cookieData.smartStyleUrl);
+        cookieData.intent && (params.intent = cookieData.intent);
+        cookieData.contextParams && (cookieData.contextParams.map(c => {
+            params[c.name] = c.value;
+        }));
+
         this.state = {
-            bearer: props.match.params.bearer,
-            sandboxApi: props.match.params.sandboxApi,
-            sandboxId: props.match.params.sandboxId,
-            refApi: props.match.params.refApi,
+            bearer: cookieData.token,
+            sandboxApi: cookieData.sandboxApiUrl,
+            sandboxId: cookieData.sandboxId,
+            refApi: cookieData.refApi,
+
+            params,
 
             selectedPersona: null,
             selectedPatient: null,
             listApps: null,
 
-            showPatientSelector: !props.match.params.patientId,
-            showPersonaSelector: !props.match.params.userId,
+            showPatientSelector: !cookieData.patientId,
+            showPersonaSelector: !cookieData.personaId,
 
-            launchCodeUrl: `${window.location.protocol}//${props.match.params.refApi}/${props.match.params.sandboxId}/data/_services/smart/Launch`,
-            personaAuthenticationUrl: `${window.location.protocol}//${props.match.params.sandboxApi}/userPersona/authenticate`,
-            registeredAppsUrl: `${window.location.protocol}//${props.match.params.sandboxApi}/app?sandboxId=${props.match.params.sandboxId}`
+            launchCodeUrl: `${window.location.protocol}//${cookieData.refApi}/${cookieData.sandboxId}/data/_services/smart/Launch`,
+            personaAuthenticationUrl: `${window.location.protocol}//${cookieData.sandboxApiUrl}/userPersona/authenticate`,
+            registeredAppsUrl: `${window.location.protocol}//${cookieData.sandboxApiUrl}/app?sandboxId=${cookieData.sandboxId}`
         }
     }
 
     componentWillMount () {
-        let params = this.props.match.params;
+        let cookieData = this.getCookieData();
 
         call(this.state.registeredAppsUrl, this.state.bearer)
             .then(loadedApps => {
                 loadedApps = loadedApps || [];
                 let state = { loadedApps };
-                if (params.appId) {
-                    state.currentApp = loadedApps.find(i => i.id == params.appId);
+                if (cookieData.appId) {
+                    state.currentApp = loadedApps.find(i => i.id == cookieData.appId);
                 }
                 this.setState(state);
             });
 
-        params.userId &&
-        call(`${window.location.protocol}//${params.sandboxApi}/userPersona?sandboxId=${params.sandboxId}`, this.state.bearer)
+        cookieData.personaId &&
+        call(`${window.location.protocol}//${cookieData.sandboxApiUrl}/userPersona?sandboxId=${cookieData.sandboxId}`, this.state.bearer)
             .then(users => {
-                let selectedPersona = users.find(i => i.id == params.userId);
+                let selectedPersona = users.find(i => i.id == cookieData.personaId);
                 this.setState({ selectedPersona });
             });
 
-        params.patientId &&
-        call(`${window.location.protocol}//${params.refApi}/${params.sandboxId}/data/Patient/${params.patientId}`, this.state.bearer)
+        cookieData.patientId &&
+        call(`${window.location.protocol}//${cookieData.refApi}/${cookieData.sandboxId}/data/Patient/${cookieData.patientId}`, this.state.bearer)
             .then(patient => {
-                this.setState({ selectedPatient: {resource: patient}, selectedPatientId: patient.id });
+                this.setState({ selectedPatient: { resource: patient }, selectedPatientId: patient.id });
             });
     }
 
@@ -73,8 +87,9 @@ export default class Home extends React.Component {
         this.state.selectedPersona && nextState.selectedPersona && this.state.selectedPersona.fhirId !== nextState.selectedPersona.fhirId &&
         this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
 
-        this.state.selectedPatient && nextState.selectedPatient && !this.state.selectedPersona && nextState.selectedPersona &&
-        this.state.currentApp && this.handleAppMenu(this.state.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
+        (nextState.selectedPatient && nextState.selectedPersona && nextState.currentApp &&
+            (!this.state.currentApp || !this.state.selectedPatient || !this.state.selectedPatient.resource.id || !this.state.selectedPersona)) &&
+        this.handleAppMenu(nextState.currentApp, nextState.selectedPatient.resource.id, nextState.selectedPersona);
     }
 
     render () {
@@ -115,41 +130,71 @@ export default class Home extends React.Component {
     }
 
     handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
-        console.log('-------------------');
         this.setState({ currentApp: e, url: undefined });
+        let parameters = {
+            patient: patient,
+            need_patient_banner: false,
+            ...this.state.params
+        };
 
         let body = {
             client_id: e.clientName,
-            parameters: {
-                patient: patient,
-                need_patient_banner: false
-            }
+            parameters
         };
-
 
         call(this.state.launchCodeUrl, this.state.bearer, 'POST', body)
             .then(data => {
-                let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
-                this.setState({ url });
-                try {
-                    if (persona.personaUserId != null) {
-                        let credentials = {
-                            username: persona.personaUserId,
-                            password: persona.password
-                        };
+                if (data.launch_id) {
+                    let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
+                    this.setState({ url });
+                    try {
+                        if (persona.personaUserId != null) {
+                            let credentials = {
+                                username: persona.personaUserId,
+                                password: persona.password
+                            };
 
-                        call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
-                            .then(personaAuthResult => {
-                                setPersonaCookie(personaAuthResult.jwt);
-                            }).catch(function (error) {
-                            console.log(error);
-                        });
+                            call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
+                                .then(personaAuthResult => {
+                                    setPersonaCookie(personaAuthResult.jwt);
+                                }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
+                    } catch (e) {
+                        console.log("There is no persona.")
                     }
-                } catch (e) {
-                    console.log("There is no persona.")
                 }
             });
 
 
+    };
+
+    getCookieData = () => {
+        let data = {};
+        let name = 'hspc-launch-token=';
+        let decodedCookie = decodeURIComponent(document.cookie);
+        if (decodedCookie.indexOf(name) >= 0) {
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    data = c.substring(name.length, c.length);
+                }
+            }
+
+            sessionStorage.launchData = data;
+            data = JSON.parse(data);
+
+            const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
+            document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+        } else if (sessionStorage.launchData) {
+            data = JSON.parse(sessionStorage.launchData);
+        }
+
+        return data;
     };
 }

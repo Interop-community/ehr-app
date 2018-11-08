@@ -1,21 +1,17 @@
 import React from "react";
+import './style.css';
 
-export default class MainGreeting extends React.Component{
-    constructor(props){
-        super(props);
+export default class MainGreeting extends React.Component {
 
-        this.state = {
-            check: props.match,
-        };
-
+    componentDidMount() {
 
     }
 
-    render() {
-        return (
-            <div>
-                {this.state.check == null ? '' : ''}
-            </div>
-        );
+    render () {
+        return <div className='loading-screen'>
+                <span>
+                    Loading data, please wait...
+                </span>
+        </div>;
     }
 }
