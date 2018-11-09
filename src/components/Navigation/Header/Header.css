@@ -1,10 +1,8 @@
 .header-wrapper {
     float: left;
     width: 100%;
-    height: 140px;
+    height: 80px;
     background: linear-gradient(#2699fb, #0C76B4);
-    border-style: solid;
-    border-width: 1px;
 }
 
 .header-persona-info-wrapper {
@@ -12,6 +10,7 @@
     overflow: hidden;
     height: 60px;
     float: right;
+    margin-top: 10px;
 }
 
 .header-persona-wrapper, .header-patient-wrapper {
@@ -19,21 +18,24 @@
 }
 
 .header-patient-wrapper {
-    width: 20%;
+    width: 21%;
     position: relative;
-    top: 25px;
     padding-left: 25px;
     box-sizing: border-box;
     vertical-align: top;
 }
 
 .header-context-wrapper {
-    width: 50%;
+    width: 61%;
     position: relative;
-    top: 25px;
     box-sizing: border-box;
     vertical-align: top;
     display: inline-block;
+    background: #0C76B4;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 25px;
+    text-align: center;
 }
 
 .header-context-wrapper > div {
@@ -43,9 +45,8 @@
 }
 
 .header-persona-wrapper {
-    width: 30%;
+    width: 18%;
     position: relative;
-    top: 30px;
 }
 
 .patient-icon-wrapper,
@@ -54,6 +55,7 @@
     width: 74px;
     height: 74px;
     position: relative;
+    top: 3px;
     border-radius: 40px;
     transition: all .3s;
 }
@@ -78,27 +80,45 @@
     color: white;
 }
 
-.gender {
-    text-align: center;
-    font-weight: 700;
+.header-info:not(.patient-name):not(.persona-id) {
+    width: 130px;
+    display: inline-block;
+    font-weight: 100;
+}
+
+.header-info.dob,
+.header-info.mrn {
+    width: 120px !important;
 }
 
 .patient-name {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
-.dob, .mrn {
-    font-size: .9rem;
+.header-patient-info-wrapper {
+    margin-top: 10px;
+}
+
+.dob, .mrn, .gender, .age {
+    font-size: .8rem;
     margin-right: .5rem;
 }
 
 .dob span:first-of-type,
-.mrn span:first-of-type {
+.mrn span:first-of-type,
+.gender span:first-of-type,
+.age span:first-of-type {
     display: inline-block;
     width: 50px;
-    height: 1.5rem;
-    line-height: 1.5rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    font-weight: bold;
+}
+
+.dob span:first-of-type,
+.mrn span:first-of-type {
+    width: 40px;
 }
 
 .persona-name {
@@ -106,12 +126,12 @@
 }
 
 .persona-id {
-    font-size: .9rem;
+    font-size: .8rem;
 }
 
 .persona-id span:first-of-type {
     display: inline-block;
-    width: 70px;
+    width: 60px;
     height: 1.5rem;
     line-height: 1.5rem;
 }
@@ -124,6 +144,10 @@
     font-weight: bold;
 }
 
+.context-icon.custom {
+    margin-right: .5rem;
+}
+
 .context-icon svg,
 .bulb path {
     fill: white !important;
@@ -131,24 +155,33 @@
 }
 
 .section-value {
-    display: block;
+    display: inline-block;
+    height: 24px;
+    margin-right: 1rem;
+    vertical-align: top;
+}
+
+.section-value > * {
+    vertical-align: top;
 }
 
 .section-value span:nth-of-type(2) {
     vertical-align: top;
     line-height: 23px;
-    margin-left: 1rem;
+    margin-left: .3rem;
     color: white;
 }
 
 .custom-context {
-    display: block;
     color: white;
+    display: inline-block;
+    height: 24px;
+    vertical-align: top;
 }
 
 .custom-context span:first-of-type {
-    width: 2rem;
-    margin-right: 1rem;
+    min-width: 2rem;
+    margin-right: .2rem;
 }
 
 .custom-context span:nth-of-type(2) {

@@ -6,7 +6,6 @@ import HospitalIcon from "material-ui/svg-icons/maps/local-hospital";
 import EventIcon from "material-ui/svg-icons/action/event";
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUserMd } from '@fortawesome/fontawesome-free-solid';
-import { Toggle } from 'material-ui';
 import "./Header.css";
 
 const ContextIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" style={{ fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421 }}>
@@ -78,10 +77,6 @@ const BulbIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.
             style={{ fill: 'rgb(140,140,140)', fillRule: 'nonzero' }}/>
     </g>
 </svg>;
-const FullScreenIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-    <path d="M0 0h24v24H0z" fill="none"/>
-    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-</svg>;
 const LinkIcon = <svg version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enableBackground="new 0 0 24 24">
     <g id="Bounding_Boxes">
         <g id="ui_x5F_spec_x5F_header_copy_3" display="none">
@@ -118,12 +113,6 @@ class HeaderBar extends Component {
             <div className="header-patient-wrapper">
                 <div className="patient-icon-wrapper" onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
                     <PersonIcon style={{ width: "74px", height: "74px" }}/>
-                    {
-                        this.props.patient &&
-                        <div className="header-info gender">
-                            <span>{this.props.patient.resource.gender.charAt(0).toUpperCase() + this.props.patient.resource.gender.slice(1)}</span>
-                        </div>
-                    }
                 </div>
                 {this.props.patient
                     ? <div className="header-patient-info-wrapper">
@@ -137,11 +126,19 @@ class HeaderBar extends Component {
                                 <span>DOB:</span>
                                 <span>{moment(this.props.patient.resource.birthDate).format("DD MMM YYYY")}</span>
                             </span>
+                            <span className="header-info age">
+                                <span>Age: </span>
+                                <span>{this.getAge(this.props.patient.resource.birthDate)}</span>
+                            </span>
                         </div>
                         <div>
                             <span className="header-info mrn">
                                 <span>MRN:</span>
                                 <span>{mrn}</span>
+                            </span>
+                            <span className="header-info gender">
+                                <span>Gender:</span>
+                                <span>{this.props.patient.resource.gender.charAt(0).toUpperCase() + this.props.patient.resource.gender.slice(1)}</span>
                             </span>
                         </div>
                     </div>
@@ -154,40 +151,36 @@ class HeaderBar extends Component {
                     </div>}
             </div>
             <div className='header-context-wrapper'>
-                <div>
-                    {cookieData.encounter && <span className='section-value'>
+                {cookieData.encounter && <span className='section-value'>
                         <span className='context-icon'>{EventIcon}</span>
                         <span>{cookieData.encounter}</span>
                     </span>}
-                    {cookieData.location && <span className='section-value'>
+                {cookieData.location && <span className='section-value'>
                         <span className='context-icon'>{HospitalIcon}</span>
                         <span>{cookieData.location}</span>
                     </span>}
-                    {cookieData.resource && <span className='section-value'>
+                {cookieData.resource && <span className='section-value'>
                         <span className='context-icon'>{DescriptionIcon}</span>
                         <span>{cookieData.resource}</span>
                     </span>}
-                    {cookieData.intent && <span className='section-value'>
+                {cookieData.intent && <span className='section-value'>
                         <span className='context-icon bulb'>{BulbIcon}</span>
                         <span>{cookieData.intent}</span>
                     </span>}
-                    {cookieData.smartStyleUrl && <span className='section-value'>
+                {cookieData.smartStyleUrl && <span className='section-value'>
                         <span className='context-icon'>{LinkIcon}</span>
                         <span>{cookieData.smartStyleUrl}</span>
                     </span>}
-                </div>
-                <div>
-                    <span className='section-title'>
+                <span className='section-title'>
 
                     </span>
-                    {cookieData.contextParams.map(param => {
-                        return <span className='custom-context section-title'>
-                            <span className='context-icon'>{ContextIcon}</span>
+                {cookieData.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
+                {cookieData.contextParams.map(param => {
+                    return <span className='custom-context section-title'>
                             <span>{param.name}: </span>
                             <span>{param.value}</span>
                     </span>;
-                    })}
-                </div>
+                })}
             </div>
             <div className="header-persona-wrapper">
                 {this.props.persona
@@ -240,6 +233,22 @@ class HeaderBar extends Component {
         }
 
         return data;
+    };
+
+    getAge = (birthday) => {
+        let currentDate = moment();
+        let birthDate = moment(Date.parse(birthday));
+
+        let result = "";
+        let years = currentDate.diff(birthDate, 'years');
+        result += years + 'y ';
+        currentDate.subtract({ years });
+        let months = currentDate.diff(birthDate, 'months');
+        result += months + 'm ';
+        currentDate.subtract({ months });
+        let days = currentDate.diff(birthDate, 'days');
+        result += days + 'd';
+        return result;
     };
 }
 
