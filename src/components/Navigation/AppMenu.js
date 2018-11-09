@@ -19,7 +19,7 @@ class AppMenu extends Component {
     componentDidMount () {
         const listItems = this.props.apps.map((d) =>
             <MenuItem key={d.id} primaryText={<span style={PRIMARY_TEXT_STYLE}>{d.clientName}</span>} style={MENU_ITEM_STYLE}
-                      value={d.id} onClick={() => this.updateMenu(d.id)} innerDivStyle={INNER_DIV_STYLE} className='app-menu-item' />);
+                      value={d.id} onClick={() => this.updateMenu(d.id)} innerDivStyle={INNER_DIV_STYLE} className='app-menu-item'/>);
         this.setState({ items: listItems });
     }
 
@@ -31,9 +31,11 @@ class AppMenu extends Component {
     render () {
         let menuStyles = { backgroundColor: 'white', height: '100%', borderRight: '1px solid lightgray', position: 'relative' };
 
-        return <Menu value={this.props.selectedItem} style={menuStyles} autoWidth={false} selectedMenuItemStyle={{color: 'rgb(0,87,120)'}}>
-                {this.props.patient && this.state.items}
-            </Menu>;
+        return <Menu value={this.props.selectedItem} style={menuStyles} autoWidth={false} selectedMenuItemStyle={{ color: 'rgb(0,87,120)' }}>
+            <MenuItem key={0} primaryText={<span style={PRIMARY_TEXT_STYLE}>My Apps</span>} style={MENU_ITEM_STYLE}
+                      value={0} onClick={() => this.updateMenu()} innerDivStyle={INNER_DIV_STYLE} className='app-menu-item first'/>
+            {this.props.patient && this.state.items}
+        </Menu>;
     }
 }
 

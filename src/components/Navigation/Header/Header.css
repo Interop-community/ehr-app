@@ -36,6 +36,7 @@
     border-bottom-right-radius: 10px;
     height: 25px;
     text-align: center;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, .3);
 }
 
 .header-context-wrapper > div {

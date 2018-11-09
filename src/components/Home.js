@@ -137,37 +137,37 @@ export default class Home extends React.Component {
             ...this.state.params
         };
 
-        let body = {
-            client_id: e.clientName,
-            parameters
-        };
+        if (!!e) {
+            let body = {
+                client_id: e.clientName,
+                parameters
+            };
 
-        call(this.state.launchCodeUrl, this.state.bearer, 'POST', body)
-            .then(data => {
-                if (data.launch_id) {
-                    let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
-                    this.setState({ url });
-                    try {
-                        if (persona.personaUserId != null) {
-                            let credentials = {
-                                username: persona.personaUserId,
-                                password: persona.password
-                            };
+            call(this.state.launchCodeUrl, this.state.bearer, 'POST', body)
+                .then(data => {
+                    if (data.launch_id) {
+                        let url = `${e.launchUri}?iss=${window.location.protocol}//${this.state.refApi}/${e.sandbox.sandboxId}/data&launch=${data.launch_id}`;
+                        this.setState({ url });
+                        try {
+                            if (persona.personaUserId != null) {
+                                let credentials = {
+                                    username: persona.personaUserId,
+                                    password: persona.password
+                                };
 
-                            call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
-                                .then(personaAuthResult => {
-                                    setPersonaCookie(personaAuthResult.jwt);
-                                }).catch(function (error) {
-                                console.log(error);
-                            });
+                                call(this.state.personaAuthenticationUrl, undefined, 'POST', credentials)
+                                    .then(personaAuthResult => {
+                                        setPersonaCookie(personaAuthResult.jwt);
+                                    }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        } catch (e) {
+                            console.log("There is no persona.")
                         }
-                    } catch (e) {
-                        console.log("There is no persona.")
                     }
-                }
-            });
-
-
+                });
+        }
     };
 
     getCookieData = () => {
