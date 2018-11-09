@@ -39,6 +39,10 @@
     box-shadow: 0 0px 10px rgba(0, 0, 0, .3);
 }
 
+.header-context-wrapper.hidden {
+    opacity: 0;
+}
+
 .header-context-wrapper > div {
     display: inline-block;
     width: 150px;

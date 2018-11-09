@@ -108,6 +108,7 @@ class HeaderBar extends Component {
         const mrn = this.props.patient && this.props.patient.resource.identifier && this.props.patient.resource.identifier[0].value;
 
         let cookieData = this.getCookieData();
+        let hasContext = cookieData.encounter || cookieData.location || cookieData.resource || cookieData.intent || cookieData.smartStyleUrl || cookieData.contextParams;
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
@@ -150,7 +151,7 @@ class HeaderBar extends Component {
                         </div>
                     </div>}
             </div>
-            <div className='header-context-wrapper'>
+            <div className={'header-context-wrapper' + (!hasContext ? ' hidden' : '')}>
                 {cookieData.encounter && <span className='section-value'>
                         <span className='context-icon'>{EventIcon}</span>
                         <span>{cookieData.encounter}</span>
@@ -174,8 +175,8 @@ class HeaderBar extends Component {
                 <span className='section-title'>
 
                     </span>
-                {cookieData.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
-                {cookieData.contextParams.map(param => {
+                {cookieData.contextParams && cookieData.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
+                {cookieData.contextParams && cookieData.contextParams.map(param => {
                     return <span className='custom-context section-title'>
                             <span>{param.name}: </span>
                             <span>{param.value}</span>
