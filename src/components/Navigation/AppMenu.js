@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Menu, MenuItem } from "material-ui";
+import WEB_ASSET from 'material-ui/svg-icons/av/web-asset';
 
 import "./AppMenu.css";
 
 const MENU_ITEM_STYLE = { height: "50px", overflow: "hidden", width: '223px', color: 'rgb(117, 117, 117)' };
-const INNER_DIV_STYLE = { width: "224px", overflow: "hidden", boxSizing: "border-box" };
+const INNER_DIV_STYLE = { width: "224px", overflow: "hidden", boxSizing: "border-box", paddingLeft: '50px' };
 const PRIMARY_TEXT_STYLE = { display: "inline-block", width: "224px", overflow: "hidden", textOverflow: "ellipsis" };
 
 class AppMenu extends Component {
@@ -18,7 +19,7 @@ class AppMenu extends Component {
 
     componentDidMount () {
         const listItems = this.props.apps.map((d) =>
-            <MenuItem key={d.id} primaryText={<span style={PRIMARY_TEXT_STYLE}>{d.clientName}</span>} style={MENU_ITEM_STYLE}
+            <MenuItem key={d.id} leftIcon={<WEB_ASSET />} primaryText={<span style={PRIMARY_TEXT_STYLE}>{d.clientName}</span>} style={MENU_ITEM_STYLE}
                       value={d.id} onClick={() => this.updateMenu(d.id)} innerDivStyle={INNER_DIV_STYLE} className='app-menu-item'/>);
         this.setState({ items: listItems });
     }
