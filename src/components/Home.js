@@ -1,9 +1,10 @@
 import React from 'react';
 import AppMenu from "./Navigation/AppMenu";
-import { Paper, Card, Divider, CardText } from "material-ui";
+import { Paper } from "material-ui";
 import ShowApp from "./ShowApp";
 import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
+import logo from '../assets/images/hspc-sndbx-logo.png';
 import { call, setPersonaCookie } from "../utils";
 
 import './Home.css';
@@ -110,23 +111,16 @@ export default class Home extends React.Component {
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
                                                    selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined}/>}
             </Paper>
-            {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">{this.buildAppCards()}</div>}
+            {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">
+                <span>
+                    <img src={logo} style={{ height: '108px' }}/>
+                </span>
+                <span>Please select any app</span>
+            </div>}
             {this.state.selectedPatient && this.state.selectedPersona && this.state.currentApp && <div className="ehr-content-wrapper">
                 <ShowApp patient={this.state.selectedPatient} url={this.state.url}/>
             </div>}
         </div>;
-    }
-
-    buildAppCards () {
-        return this.state.loadedApps.map(d =>
-            <Card className="app-card" key={d.id} onClick={() => this.handleAppMenu(d)}>
-                <CardText className="card-body">
-                    <img style={{ maxHeight: "160px" }} src={d.logoUri || 'https://content.hspconsortium.org/images/hspc/icon/HSPCSandboxNoIconApp-512.png'} alt="logo"/>
-                    <Divider style={{ "backgroundColor": "#f0f0f0" }}/>
-                    <span className="card-title">{d.clientName}</span>
-                </CardText>
-            </Card>
-        );
     }
 
     handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
