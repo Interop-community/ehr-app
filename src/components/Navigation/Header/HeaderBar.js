@@ -176,8 +176,8 @@ class HeaderBar extends Component {
 
                     </span>
                 {cookieData.contextParams && cookieData.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
-                {cookieData.contextParams && cookieData.contextParams.map(param => {
-                    return <span className='custom-context section-title'>
+                {cookieData.contextParams && cookieData.contextParams.map((param, key) => {
+                    return <span className='custom-context section-title' key={key}>
                             <span>{param.name}: </span>
                             <span>{param.value}</span>
                     </span>;

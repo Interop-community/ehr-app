@@ -117,8 +117,6 @@ function setCookie(cname, data) {
     const url = window.location.host.split(":")[0].split(".").slice(-2).join(".");
     const date = new Date();
 
-    console.log(url);
-
     date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
     document.cookie = `${cname}=${data}; expires=${date["toGMTString"]()}; domain=${url}; path=/`;
 }

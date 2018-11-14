@@ -18,7 +18,7 @@
 }
 
 .header-patient-wrapper {
-    width: 21%;
+    width: 80%;
     position: relative;
     padding-left: 25px;
     box-sizing: border-box;
@@ -26,8 +26,7 @@
 }
 
 .header-context-wrapper {
-    width: 61%;
-    position: relative;
+    width: 54%;
     box-sizing: border-box;
     vertical-align: top;
     display: inline-block;
@@ -36,7 +35,9 @@
     border-bottom-right-radius: 10px;
     height: 25px;
     text-align: center;
-    box-shadow: 0 0px 10px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    position: absolute;
+    left: 23%;
 }
 
 .header-context-wrapper.hidden {
@@ -50,8 +51,9 @@
 }
 
 .header-persona-wrapper {
-    width: 18%;
-    position: relative;
+    width: 20%;
+    position: absolute;
+    min-width: 290px;
 }
 
 .patient-icon-wrapper,
@@ -105,6 +107,11 @@
     margin-top: 10px;
 }
 
+.header-patient-info-row {
+    width: 26%;
+    min-width: 230px;
+}
+
 .dob, .mrn, .gender, .age {
     font-size: .8rem;
     margin-right: .5rem;
@@ -115,15 +122,10 @@
 .gender span:first-of-type,
 .age span:first-of-type {
     display: inline-block;
-    width: 50px;
     height: 1.2rem;
     line-height: 1.2rem;
     font-weight: bold;
-}
-
-.dob span:first-of-type,
-.mrn span:first-of-type {
-    width: 40px;
+    margin-right: .3rem;
 }
 
 .persona-name {
@@ -197,4 +199,10 @@
     display: inline-block;
     vertical-align: top;
     line-height: 23px;
+}
+
+@media screen and (max-width: 1360px) {
+    .header-patient-info-wrapper > div:not(:first-of-type) {
+        display: inline-block;
+    }
 }

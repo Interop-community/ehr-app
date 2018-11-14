@@ -132,7 +132,6 @@ export default class PatientSelectorDialog extends React.Component {
                 );
                 this.setState({items: listItems});
                 this.setState({patientArray: responseData});
-                console.log(responseData);
             }).catch(function () {
             console.log("error");
         });
