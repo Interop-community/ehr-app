@@ -115,7 +115,7 @@ export default class Home extends React.Component {
                 <span>
                     <img src={logo} style={{ height: '108px' }}/>
                 </span>
-                <span>Please select any app</span>
+                <span>Please select an app.</span>
             </div>}
             {this.state.selectedPatient && this.state.selectedPersona && this.state.currentApp && <div className="ehr-content-wrapper">
                 <ShowApp patient={this.state.selectedPatient} url={this.state.url}/>
