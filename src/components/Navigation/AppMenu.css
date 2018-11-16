@@ -1,3 +1,9 @@
-.app-menu-item {
-    width: 224px;
+.app-menu-item:hover {
+    background-color: rgba(0,87,120, .1) !important;
+}
+
+.app-menu-item.first {
+    border-bottom: 1px solid lightgray !important;
+    position: relative !important;
+    top: -8px;
 }

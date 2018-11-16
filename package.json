@@ -1,6 +1,6 @@
 {
   "name": "ehr-app",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -23,7 +23,8 @@
     "react-icons": "^2.2.7",
     "react-iframe": "^1.1.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "svg-react-loader": "^0.4.6"
   },
   "scripts": {
     "start": "react-scripts start",
