@@ -193,6 +193,7 @@ export default class Home extends React.Component {
     };
 
     changePersona = (e, type) => {
+        debugger
         let launchData = sessionStorage.getItem('launchData');
         launchData = JSON.parse(launchData);
         let newLaunchData = {refApi: launchData.refApi, sandboxApiUrl: launchData.sandboxApiUrl,
