@@ -107,8 +107,7 @@ class HeaderBar extends Component {
     render () {
         const mrn = this.props.patient && this.props.patient.resource.identifier && this.props.patient.resource.identifier[0].value;
 
-        let cookieData = this.getCookieData();
-        let hasContext = cookieData.encounter || cookieData.location || cookieData.resource || cookieData.intent || cookieData.smartStyleUrl || cookieData.contextParams;
+        let hasContext = this.props.params.encounter || this.props.params.location || this.props.params.resource || this.props.params.intent || this.props.params.smartStyleUrl || this.props.params.contextParams;
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
@@ -152,31 +151,31 @@ class HeaderBar extends Component {
                     </div>}
             </div>
             <div className={'header-context-wrapper' + (!hasContext ? ' hidden' : '')}>
-                {cookieData.encounter && <span className='section-value'>
+                {this.props.params.encounter && <span className='section-value'>
                         <span className='context-icon'>{EventIcon}</span>
-                        <span>{cookieData.encounter}</span>
+                        <span>{this.props.params.encounter}</span>
                     </span>}
-                {cookieData.location && <span className='section-value'>
+                {this.props.params.location && <span className='section-value'>
                         <span className='context-icon'>{HospitalIcon}</span>
-                        <span>{cookieData.location}</span>
+                        <span>{this.props.params.location}</span>
                     </span>}
-                {cookieData.resource && <span className='section-value'>
+                {this.props.params.resource && <span className='section-value'>
                         <span className='context-icon'>{DescriptionIcon}</span>
-                        <span>{cookieData.resource}</span>
+                        <span>{this.props.params.resource}</span>
                     </span>}
-                {cookieData.intent && <span className='section-value'>
+                {this.props.params.intent && <span className='section-value'>
                         <span className='context-icon bulb'>{BulbIcon}</span>
-                        <span>{cookieData.intent}</span>
+                        <span>{this.props.params.intent}</span>
                     </span>}
-                {cookieData.smartStyleUrl && <span className='section-value'>
+                {this.props.params.smartStyleUrl && <span className='section-value'>
                         <span className='context-icon'>{LinkIcon}</span>
-                        <span>{cookieData.smartStyleUrl}</span>
+                        <span>{this.props.params.smartStyleUrl}</span>
                     </span>}
                 <span className='section-title'>
 
                     </span>
-                {cookieData.contextParams && cookieData.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
-                {cookieData.contextParams && cookieData.contextParams.map((param, key) => {
+                {this.props.params.contextParams && this.props.params.contextParams.length > 0 && <span className='context-icon custom'>{ContextIcon}</span>}
+                {this.props.params.contextParams && this.props.params.contextParams.map((param, key) => {
                     return <span className='custom-context section-title' key={key}>
                             <span>{param.name}: </span>
                             <span>{param.value}</span>
@@ -207,34 +206,6 @@ class HeaderBar extends Component {
             </div>
         </div>;
     }
-
-    getCookieData = () => {
-        let data = {};
-        let name = 'hspc-launch-token=';
-        let decodedCookie = decodeURIComponent(document.cookie);
-        if (decodedCookie.indexOf(name) >= 0) {
-            let ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    data = c.substring(name.length, c.length);
-                }
-            }
-
-            sessionStorage.launchData = data;
-            data = JSON.parse(data);
-
-            const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
-            document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
-        } else if (sessionStorage.launchData) {
-            data = JSON.parse(sessionStorage.launchData);
-        }
-
-        return data;
-    };
 
     getAge = (birthday) => {
         let currentDate = moment();

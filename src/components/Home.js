@@ -96,16 +96,16 @@ export default class Home extends React.Component {
     render () {
         return <div className="home-screen-wrapper">
             <HeaderBar patient={this.state.selectedPatient} persona={this.state.selectedPersona} togglePatientSelector={() => this.setState({ showPatientSelector: true })}
-                       togglePersonaSelector={() => this.setState({ showPersonaSelector: true })}/>
+                       togglePersonaSelector={() => this.setState({ showPersonaSelector: true })} params={this.state.params}/>
             <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                                   handlePersonaSelection={e => this.setState({ selectedPersona: e })} onClose={() => this.setState({ showPersonaSelector: false })}
+                                   handlePersonaSelection={e => this.setState({ selectedPersona: e, params: {} })} onClose={() => this.setState({ showPersonaSelector: false })}
             />
             <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    open={this.state.showPatientSelector}
                                    onClose={() => this.setState({ showPatientSelector: false })}
-                                   handlePatientSelection={e => this.setState({ selectedPatient: e, selectedPatientId: e.resource.id })}
+                                   handlePatientSelection={e => this.setState({ selectedPatient: e, selectedPatientId: e.resource.id, params: {} })}
             />
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
