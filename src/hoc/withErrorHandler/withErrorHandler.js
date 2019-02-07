@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-import Aux from '../Aux/Aux';
+import HOC from '../HOC/HOC';
 
 const withErrorHandler = ( WrappedComponent, axios ) => {
     return class extends Component {
@@ -30,7 +30,7 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
 
         render () {
             return (
-                <Aux>
+                <HOC>
 {/*
                     <Modal
                         show={this.state.error}
@@ -39,7 +39,7 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
                     </Modal>
 */}
                     <WrappedComponent {...this.props} />
-                </Aux>
+                </HOC>
             );
         }
     }
