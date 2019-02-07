@@ -13,4 +13,5 @@
 
 .ehr-content-wrapper.padding > * {
     display: block;
+    font-size: 20px;
 }

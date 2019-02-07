@@ -99,13 +99,13 @@ export default class Home extends React.Component {
                        togglePersonaSelector={() => this.setState({ showPersonaSelector: true })}/>
             <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                                   handlePersonaSelection={e => this.setState({ selectedPersona: e })} onClose={() => this.setState({ showPersonaSelector: false })}
+                                   handlePersonaSelection={e => this.changePersona(e, 'persona')} onClose={() => this.setState({ showPersonaSelector: false })}
             />
             <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    open={this.state.showPatientSelector}
                                    onClose={() => this.setState({ showPatientSelector: false })}
-                                   handlePatientSelection={e => this.setState({ selectedPatient: e, selectedPatientId: e.resource.id })}
+                                   handlePatientSelection={e => this.changePersona(e, 'patient')}
             />
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
@@ -115,7 +115,7 @@ export default class Home extends React.Component {
                 <span>
                     <img src={logo} style={{ height: '108px' }}/>
                 </span>
-                <span>Please select any app</span>
+                <span>Please select an app.</span>
             </div>}
             {this.state.selectedPatient && this.state.selectedPersona && this.state.currentApp && <div className="ehr-content-wrapper">
                 <ShowApp patient={this.state.selectedPatient} url={this.state.url}/>
@@ -191,4 +191,18 @@ export default class Home extends React.Component {
 
         return data;
     };
+
+    changePersona = (e, type) => {
+        debugger
+        let launchData = sessionStorage.getItem('launchData');
+        launchData = JSON.parse(launchData);
+        let newLaunchData = {refApi: launchData.refApi, sandboxApiUrl: launchData.sandboxApiUrl,
+            sandboxId: launchData.sandboxId, token: launchData.token};
+        sessionStorage.setItem('launchData', JSON.stringify(newLaunchData));
+        if (type === 'patient') {
+            this.setState({ selectedPatient: e, selectedPatientId: e.resource.id });
+        } else {
+            this.setState({ selectedPersona: e });
+        }
+    }
 }
