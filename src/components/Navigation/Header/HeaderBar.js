@@ -7,7 +7,7 @@ import EventIcon from "material-ui/svg-icons/action/event";
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faUserMd } from '@fortawesome/fontawesome-free-solid';
 import "./Header.css";
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 
 const ContextIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" style={{ fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421 }}>
     <rect x="0" y="0" width="24" height="24" style={{ fill: 'none' }}/>
@@ -228,7 +228,7 @@ class HeaderBar extends Component {
             sessionStorage.launchData = data;
             data = JSON.parse(data);
 
-            cookie.remove('hspc-launch-token', { path: '/' });
+            Cookies.remove('hspc-launch-token', { path: '/' });
         } else if (sessionStorage.launchData) {
             data = JSON.parse(sessionStorage.launchData);
         }

@@ -5,7 +5,7 @@
  * @returns {string}
  */
 import moment from "moment";
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 
 const PERSONA_COOKIE_NAME = "hspc-persona-token";
 
@@ -110,9 +110,9 @@ function getCookie (cname) {
 }
 
 function deleteCookie (cname) {
-    cookie.remove(cname, { path: '/' });
+    Cookies.remove(cname, { path: '/' });
 }
 
 function setCookie (cname, data) {
-    cookie.save(cname, data, { path: '/' });
+    Cookies.set(cname, data, { path: '/' });
 }
