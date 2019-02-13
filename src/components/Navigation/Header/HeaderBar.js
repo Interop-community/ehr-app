@@ -102,6 +102,7 @@ class HeaderBar extends Component {
             open: false,
             selectedItem: 1,
             title: "Choose Patient",
+            data: null
         };
     }
 
@@ -210,30 +211,34 @@ class HeaderBar extends Component {
     }
 
     getCookieData = () => {
-        let data = {};
-        let name = 'hspc-launch-token=';
-        let decodedCookie = decodeURIComponent(document.cookie);
-        if (decodedCookie.indexOf(name) >= 0) {
-            let ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
+        if (!this.state.data) {
+            let data = {};
+            let name = 'hspc-launch-token=';
+            let decodedCookie = decodeURIComponent(document.cookie);
+            if (decodedCookie.indexOf(name) >= 0) {
+                let ca = decodedCookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        data = c.substring(name.length, c.length);
+                    }
                 }
-                if (c.indexOf(name) == 0) {
-                    data = c.substring(name.length, c.length);
-                }
+
+                sessionStorage.launchData = data;
+                data = JSON.parse(data);
+
+                Cookies.remove('hspc-launch-token', { path: '/' });
+            } else if (sessionStorage.launchData) {
+                data = JSON.parse(sessionStorage.launchData);
             }
-
-            sessionStorage.launchData = data;
-            data = JSON.parse(data);
-
-            Cookies.remove('hspc-launch-token', { path: '/' });
-        } else if (sessionStorage.launchData) {
-            data = JSON.parse(sessionStorage.launchData);
+            this.setState({ data });
+            return data;
+        } else {
+            return this.state.data;
         }
-
-        return data;
     };
 
     getAge = (birthday) => {
