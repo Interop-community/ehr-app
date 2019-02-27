@@ -110,7 +110,8 @@ function getCookie (cname) {
 }
 
 function deleteCookie (cname) {
-    Cookies.remove(cname, { path: '/' });
+    const url = window.location.host.split(":")[0].split(".").slice(-2).join(".");
+    Cookies.remove(cname, { path: '/', domain: url });
 }
 
 function setCookie (cname, data) {
