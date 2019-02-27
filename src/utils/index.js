@@ -85,7 +85,7 @@ export function getPersonaCookie () {
 }
 
 export function removePersonaCookie () {
-    getCookie(PERSONA_COOKIE_NAME) && deleteCookie(PERSONA_COOKIE_NAME);
+    deleteCookie(PERSONA_COOKIE_NAME);
 }
 
 export function setPersonaCookie (jwt) {
