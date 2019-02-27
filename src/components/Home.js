@@ -185,6 +185,7 @@ export default class Home extends React.Component {
 
             // const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
             // document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            debugger;
             removePersonaCookie();
         } else if (sessionStorage.launchData) {
             data = JSON.parse(sessionStorage.launchData);
@@ -194,7 +195,6 @@ export default class Home extends React.Component {
     };
 
     changePersona = (e, type) => {
-        debugger
         let launchData = sessionStorage.getItem('launchData');
         launchData = JSON.parse(launchData);
         let newLaunchData = {refApi: launchData.refApi, sandboxApiUrl: launchData.sandboxApiUrl,
