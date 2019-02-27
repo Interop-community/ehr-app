@@ -118,5 +118,5 @@ function setCookie (cname, data) {
     const date = new Date();
 
     date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
-    Cookies.set(cname, data, { path: '/', expires: date["toGMTString"](), domain: url });
+    Cookies.set(cname, data, { path: '/', expires: date.getTime(), domain: url });
 }
