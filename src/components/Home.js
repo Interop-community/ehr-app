@@ -5,7 +5,7 @@ import ShowApp from "./ShowApp";
 import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
 import logo from '../assets/images/hspc-sndbx-logo.png';
-import { call, setPersonaCookie } from "../utils";
+import { call, setPersonaCookie, removePersonaCookie } from "../utils";
 
 import './Home.css';
 import HeaderBar from "./Navigation/Header/HeaderBar";
@@ -183,8 +183,9 @@ export default class Home extends React.Component {
             sessionStorage.launchData = data;
             data = JSON.parse(data);
 
-            const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
-            document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            // const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
+            // document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            removePersonaCookie();
         } else if (sessionStorage.launchData) {
             data = JSON.parse(sessionStorage.launchData);
         }
