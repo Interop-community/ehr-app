@@ -183,8 +183,8 @@ export default class Home extends React.Component {
             sessionStorage.launchData = data;
             data = JSON.parse(data);
 
-            // const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
-            // document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
+            document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
         } else if (sessionStorage.launchData) {
             data = JSON.parse(sessionStorage.launchData);
         }
