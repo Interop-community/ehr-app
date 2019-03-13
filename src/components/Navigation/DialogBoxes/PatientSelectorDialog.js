@@ -74,7 +74,13 @@ export default class PatientSelectorDialog extends React.Component {
 
     search(nameFilter = this.state.nameFilter) {
         let token = this.props.bearer;
-        let url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=${nameFilter}&_count=50`;
+        let url;
+        if (nameFilter !== '') {
+           url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=${nameFilter}&_count=50`;
+        } else {
+           url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=50`;
+        }
+
 
         fetch(url, {method: 'GET', headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${token}`}})
             .then(response => response.json())
@@ -111,7 +117,7 @@ export default class PatientSelectorDialog extends React.Component {
         this.setState({number: pageNumber});
         let url = this.state.pageUrls[pageNumber - 1];
         if (pageNumber === 1) {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=&_count=50`;
+            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=50`;
         }
 
         fetch(url, {
