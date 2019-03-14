@@ -5,10 +5,11 @@
  * @returns {string}
  */
 import moment from "moment";
+import Cookies from 'js-cookie';
 
 const PERSONA_COOKIE_NAME = "hspc-persona-token";
 
-export function getPatientName(patient) {
+export function getPatientName (patient) {
     const names = patient.name;
 
     if (!names || !names.length) {
@@ -62,11 +63,11 @@ export function getPatientName(patient) {
     return out.join(" ");
 }
 
-export function call(url, token, method = "GET", body) {
-    let headers = {'Content-Type': 'application/json;charset=UTF-8'};
+export function call (url, token, method = "GET", body) {
+    let headers = { 'Content-Type': 'application/json;charset=UTF-8' };
     token && (headers.Authorization = `Bearer ${token}`);
     return new Promise((resolve, reject) => {
-        let props = {method, headers};
+        let props = { method, headers };
         body && (props.body = JSON.stringify(body));
         fetch(url, props)
             .then(response => response.json())
@@ -79,20 +80,20 @@ export function call(url, token, method = "GET", body) {
     });
 }
 
-export function getPersonaCookie() {
+export function getPersonaCookie () {
     return getCookie(PERSONA_COOKIE_NAME);
 }
 
-export function removePersonaCookie() {
-    getCookie(PERSONA_COOKIE_NAME) && deleteCookie(PERSONA_COOKIE_NAME);
+export function removePersonaCookie () {
+    deleteCookie(PERSONA_COOKIE_NAME);
 }
 
-export function setPersonaCookie(jwt) {
+export function setPersonaCookie (jwt) {
     setCookie(PERSONA_COOKIE_NAME, jwt);
 }
 
 
-function getCookie(cname) {
+function getCookie (cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
@@ -108,15 +109,15 @@ function getCookie(cname) {
     return undefined;
 }
 
-function deleteCookie(cname) {
+function deleteCookie (cname) {
     const url = window.location.host.split(":")[0].split(".").slice(-2).join(".");
-    document.cookie = `${cname}=${JSON.stringify({})}; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${url}; path=/`;
+    Cookies.remove(cname, { path: '/', domain: url });
 }
 
-function setCookie(cname, data) {
+function setCookie (cname, data) {
     const url = window.location.host.split(":")[0].split(".").slice(-2).join(".");
     const date = new Date();
 
     date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
-    document.cookie = `${cname}=${data}; expires=${date["toGMTString"]()}; domain=${url}; path=/`;
+    Cookies.set(cname, data, { path: '/', expires: date.getTime(), domain: url });
 }

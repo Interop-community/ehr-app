@@ -5,7 +5,7 @@ import ShowApp from "./ShowApp";
 import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
 import logo from '../assets/images/hspc-sndbx-logo.png';
-import { call, setPersonaCookie } from "../utils";
+import { call, setPersonaCookie, removePersonaCookie } from "../utils";
 
 import './Home.css';
 import HeaderBar from "./Navigation/Header/HeaderBar";
@@ -99,13 +99,13 @@ export default class Home extends React.Component {
                        togglePersonaSelector={() => this.setState({ showPersonaSelector: true })}/>
             <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
-                                   handlePersonaSelection={e => this.setState({ selectedPersona: e })} onClose={() => this.setState({ showPersonaSelector: false })}
+                                   handlePersonaSelection={e => this.changePersona(e, 'persona')} onClose={() => this.setState({ showPersonaSelector: false })}
             />
             <PatientSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient}
                                    bearer={this.state.bearer} sandboxApi={this.state.sandboxApi} sandboxId={this.state.sandboxId}
                                    open={this.state.showPatientSelector}
                                    onClose={() => this.setState({ showPatientSelector: false })}
-                                   handlePatientSelection={e => this.setState({ selectedPatient: e, selectedPatientId: e.resource.id })}
+                                   handlePatientSelection={e => this.changePersona(e, 'patient')}
             />
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
@@ -183,12 +183,27 @@ export default class Home extends React.Component {
             sessionStorage.launchData = data;
             data = JSON.parse(data);
 
-            const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
-            document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            // const domain = window.location.host.split(":")[0].split(".").slice(-2).join(".");
+            // document.cookie = `hspc-launch-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
+            debugger;
+            removePersonaCookie();
         } else if (sessionStorage.launchData) {
             data = JSON.parse(sessionStorage.launchData);
         }
 
         return data;
     };
+
+    changePersona = (e, type) => {
+        let launchData = sessionStorage.getItem('launchData');
+        launchData = JSON.parse(launchData);
+        let newLaunchData = {refApi: launchData.refApi, sandboxApiUrl: launchData.sandboxApiUrl,
+            sandboxId: launchData.sandboxId, token: launchData.token};
+        sessionStorage.setItem('launchData', JSON.stringify(newLaunchData));
+        if (type === 'patient') {
+            this.setState({ selectedPatient: e, selectedPatientId: e.resource.id });
+        } else {
+            this.setState({ selectedPersona: e });
+        }
+    }
 }
