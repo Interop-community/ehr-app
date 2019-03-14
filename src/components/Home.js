@@ -14,8 +14,10 @@ const divStyle = {
     float: 'left',
     backgroundColor: '#4D5B66',
     width: '224px',
-    height: 'calc(100vh - 60px)',
-    borderRadius: 0
+    height: 'calc(100vh - 80px)',
+    borderRadius: 0,
+    overflowX: 'hidden',
+    overflowY: 'auto'
 };
 
 export default class Home extends React.Component {

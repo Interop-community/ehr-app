@@ -30,7 +30,7 @@ class AppMenu extends Component {
     }
 
     render () {
-        let menuStyles = { backgroundColor: 'white', height: '100%', borderRight: '1px solid lightgray', position: 'relative' };
+        let menuStyles = { backgroundColor: 'white', minHeight: '100%', borderRight: '1px solid lightgray', position: 'relative' };
 
         return <Menu value={this.props.selectedItem} style={menuStyles} autoWidth={false} selectedMenuItemStyle={{ color: 'rgb(0,87,120)' }}>
             {this.props.patient && this.state.items}
