@@ -98,6 +98,7 @@ export default class PatientSelectorDialog extends React.Component {
             })
             .catch(e => {
                 console.log(e);
+                this.setState({items: []})
             });
     }
 
