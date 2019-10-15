@@ -276,7 +276,8 @@ class HeaderBar extends Component {
 
     addContext = () => {
         let data = JSON.parse(sessionStorage.launchData);
-        data && data.contextParams && data.contextParams.push({name: this.state.key, value: this.state.val});
+        data.contextParams = data.contextParams || [];
+        data.contextParams.push({name: this.state.key, value: this.state.val});
         sessionStorage.launchData = JSON.stringify(data);
         this.props.updateCustomContext && this.props.updateCustomContext();
         this.setState({addContext: false, key: '', val: ''});

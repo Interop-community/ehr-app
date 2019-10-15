@@ -20,6 +20,10 @@ const STRINGS = {
  * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
  */
 class PatientSelectorDialog extends React.Component {
+
+    fetching = false;
+    isListening = false;
+
     constructor(props) {
         super(props);
 
@@ -29,12 +33,27 @@ class PatientSelectorDialog extends React.Component {
             total: 1,
             display: 1,
             number: 1,
-            nameFilter: ""
+            nameFilter: "",
+            patientArray: []
         };
     }
 
     componentDidMount() {
         this.search();
+    }
+
+    componentDidUpdate() {
+        setTimeout(() => {
+            if (this.props.open && !this.isListening) {
+                let element = document.getElementsByClassName('scroll-wrapper')[0];
+                !!element && element.addEventListener('scroll', this.scroll);
+                this.isListening = true;
+            } else if (!this.props.open && this.isListening) {
+                let element = document.getElementsByClassName('scroll-wrapper')[0];
+                !!element && element.removeEventListener('scroll', this.scroll);
+                this.isListening = false;
+            }
+        }, 700);
     }
 
     render() {
@@ -46,8 +65,8 @@ class PatientSelectorDialog extends React.Component {
                 </Button>
             </div>
             <div className='patients-wrapper'>
-                <TextField label={STRINGS.nameFilter} onChange={(_e, nameFilter) => this.setState({nameFilter}, this.search.bind(this))}/>
-                <div>
+                <TextField label={STRINGS.nameFilter} onChange={e => this.search(e.target.value)}/>
+                <div className='scroll-wrapper'>
                     <Table className='patients-table'>
                         <TableHead style={{backgroundColor: this.props.theme.p5}}>
                             <TableRow>
@@ -57,7 +76,13 @@ class PatientSelectorDialog extends React.Component {
                             </TableRow>
                         </TableHead>
                         <TableBody role='checkbox'>
-                            {this.state.items}
+                            {this.state.patientArray.map(d =>
+                                <TableRow key={d.resource.id} className="patient-table-row" onClick={() => this.handleSelectedPatient(d)} hover>
+                                    <TableCell>{getPatientName(d.resource)}</TableCell>
+                                    <TableCell>{(moment(d.resource.birthDate)).format("DD MMM YYYY")}</TableCell>
+                                    <TableCell>{d.resource.gender}</TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </div>
@@ -65,28 +90,43 @@ class PatientSelectorDialog extends React.Component {
         </Dialog>
     }
 
-    search(nameFilter = this.state.nameFilter) {
+    scroll = () => {
+        let stage = document.getElementsByClassName('scroll-wrapper')[0];
+        let dif = stage.scrollHeight - stage.scrollTop - stage.offsetHeight;
+
+        let shouldFetch = dif <= 50;
+        if(shouldFetch && !this.fetching) {
+            this.fetching = true;
+            console.log('fetching!');
+            fetch(this.state.nextPageUrl, {method: 'GET', headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${this.props.bearer}`}})
+                .then(response => response.json())
+                .then((responseData) => {
+                    this.setState({patientArray: this.state.patientArray.concat(responseData.entry)});
+                    this.setupPagination(responseData);
+                    this.fetching = false;
+                })
+                .catch(e => {
+                    this.fetching = true;
+                    console.log(e);
+                    this.setState({items: []})
+                });
+        }
+    };
+
+    search = (nameFilter = this.state.nameFilter) => {
         let token = this.props.bearer;
         let url;
         if (nameFilter !== '') {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&name=${nameFilter}&_count=50`;
+            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?name:contains=${nameFilter}&_sort:asc=family&_sort:asc=given&_count=20`;
         } else {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=50`;
+            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=20`;
         }
 
 
         fetch(url, {method: 'GET', headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${token}`}})
             .then(response => response.json())
             .then((responseData) => {
-                const listItems = responseData.entry.map(d =>
-                    <TableRow key={d.resource.id} className="patient-table-row" onClick={() => this.handleSelectedPatient(d)} hover>
-                        <TableCell>{getPatientName(d.resource)}</TableCell>
-                        <TableCell>{(moment(d.resource.birthDate)).format("DD MMM YYYY")}</TableCell>
-                        <TableCell>{d.resource.gender}</TableCell>
-                    </TableRow>
-                );
-                this.setState({items: listItems});
-                this.setState({patientArray: responseData});
+                this.setState({patientArray: responseData.entry || []});
                 this.setupPagination(responseData);
             })
             .catch(e => {
@@ -94,6 +134,12 @@ class PatientSelectorDialog extends React.Component {
                 this.setState({items: []})
             });
     }
+
+    setupPagination = (results) => {
+        let nextPageUrl = results.link.find(i => i.relation === 'next');
+        nextPageUrl = nextPageUrl ? nextPageUrl.url : null;
+        this.setState({nextPageUrl})
+    };
 
     toggle = () => {
         this.props.onClose && this.props.onClose();
@@ -105,48 +151,6 @@ class PatientSelectorDialog extends React.Component {
         this.props.handlePatientSelection(doc);
         this.toggle();
 
-    };
-
-    handlePageChange(pageNumber) {
-        this.setState({number: pageNumber});
-        let url = this.state.pageUrls[pageNumber - 1];
-        if (pageNumber === 1) {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=50`;
-        }
-
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Authorization': `Bearer ${this.props.bearer}`
-            }
-        })
-            .then(response => response.json())
-            .then((responseData) => {
-                const listItems = responseData.entry.map((d) =>
-                    <TableRow key={d.resource.id}>
-                        <TableCell>{d.resource.name[0].family}</TableCell>
-                        <TableCell>{d.resource.birthDate}</TableCell>
-                        <TableCell>{d.resource.gender}</TableCell>
-                    </TableRow>
-                );
-                this.setState({items: listItems});
-                this.setState({patientArray: responseData});
-            }).catch(function () {
-            console.log("error");
-        });
-    };
-
-    setupPagination = (results) => {
-        let totalPages = results.total / 50;
-        totalPages = Math.ceil(totalPages);
-        this.setState({total: totalPages});
-        this.setState({display: totalPages});
-        let pageUrls = [];
-        for (let i = 0; i < results.link.length; i++) {
-            pageUrls[i] = results.link[i].url
-        }
-        this.setState({pageUrls: pageUrls})
     };
 }
 

@@ -131,7 +131,7 @@ export default class Home extends React.Component {
             params[c.name] = c.value;
         }));
 
-        this.setState({params});
+        this.setState({params}, () => this.handleAppMenu(this.state.currentApp));
     };
 
     handleAppMenu = (e, patient = this.state.selectedPatientId, persona = this.state.selectedPersona) => {
