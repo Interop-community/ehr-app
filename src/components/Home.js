@@ -106,7 +106,7 @@ export default class Home extends React.Component {
             <PersonaSelectorDialog refApi={this.state.refApi} patient={this.state.selectedPatient} open={this.state.showPersonaSelector} bearer={this.state.bearer} sandboxApi={this.state.sandboxApi}
                                    sandboxId={this.state.sandboxId} handlePersonaSelection={e => this.changePersona(e, 'persona')} onClose={() => this.setState({showPersonaSelector: false})}/>
             <Paper style={divStyle}>
-                {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps}
+                {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps} clearNotifications={this.clearNotifications}
                                                    selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined} cards={this.state.cards}/>}
             </Paper>
             {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">
@@ -120,6 +120,10 @@ export default class Home extends React.Component {
             </div>}
         </div>;
     }
+
+    clearNotifications = () => {
+        this.setState({cards: undefined});
+    };
 
     updateCustomContext = () => {
         let cookieData = JSON.parse(sessionStorage.launchData);
