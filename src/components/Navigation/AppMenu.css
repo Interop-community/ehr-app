@@ -152,7 +152,7 @@
 }
 .hooks-dialog > div:first-of-type {
     padding: 0 !important;
-    height: 35vh;
+    height: 50vh;
     overflow: hidden;
 }
 .hooks-dialog .no-cards-message {
