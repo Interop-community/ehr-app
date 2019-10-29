@@ -253,7 +253,7 @@ export default class Home extends React.Component {
                     // Authorize the hook
                     let userData = {username: this.state.selectedPersona.personaUserId, password: this.state.selectedPersona.password};
 
-                    API.post("http://" + token.sandboxApiUrl + "/userPersona/authenticate", userData)
+                    API.post(window.location.protocol + "//" + token.sandboxApiUrl + "/userPersona/authenticate", userData)
                         .then(authData => {
                             let data = {
                                 hookInstance,
