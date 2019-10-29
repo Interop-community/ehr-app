@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {List, ListItem} from "@material-ui/core";
+import {List, ListItem, Fab, Badge, Menu, MenuItem, Divider} from "@material-ui/core";
 import WEB_ASSET from '@material-ui/icons/WebAsset';
 
 import "./AppMenu.css";
@@ -13,6 +13,7 @@ class AppMenu extends Component {
         super(props);
         this.state = {
             items: [],
+            menu: false,
             token: props.bearer,
         };
     }
@@ -31,12 +32,34 @@ class AppMenu extends Component {
     }
 
     render() {
-        let menuStyles = {backgroundColor: 'white', minHeight: 'calc(100% - 16px)', borderRight: '1px solid lightgray', position: 'relative'};
+        let menuStyles = {backgroundColor: 'rgb(245, 245, 245)', minHeight: 'calc(100% - 16px)', borderRight: '1px solid lightgray', position: 'relative'};
+        let cards = this.props.cards || [];
+        let disabled = !this.props.cards || !this.props.cards.length;
 
-        return <List value={this.props.selectedItem} style={menuStyles}>
-            {this.props.patient && this.state.items}
-        </List>;
+        console.log(this.props.cards);
+
+        return <div style={{height: '100%', position: 'relative'}}>
+            <List value={this.props.selectedItem} style={menuStyles}>
+                {this.props.patient && this.state.items}
+            </List>
+            <Fab className='hooks-notifications-button' color='primary' disabled={disabled} onClick={this.toggleMenu}>
+                <img src='./hook.png' style={{width: '23px', height: 'auto'}}/>
+                <Badge badgeContent={cards.length} className={`badge${disabled ? ' hidden' : ''}`}/>
+            </Fab>
+            <Menu className='hooks-list' onClose={this.toggleMenu} open={this.state.menu} anchorEl={this.state.anchorEl} anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
+                {cards.map(card => [
+                    <MenuItem className='hook-item' key={card.id}>
+                        {card.summary}
+                    </MenuItem>,
+                    <Divider key={`${card.id}_d`}/>
+                ])}
+            </Menu>
+        </div>;
     }
+
+    toggleMenu = (e = {}) => {
+        this.setState({menu: !this.state.menu, anchorEl: e.target})
+    };
 }
 
 export default AppMenu;

@@ -1,9 +1,36 @@
 .app-menu-item:hover {
-    background-color: rgba(0,87,120, .1) !important;
+    background-color: rgba(0, 87, 120, .1) !important;
 }
 
 .app-menu-item.first {
     border-bottom: 1px solid lightgray !important;
     position: relative !important;
     top: -8px;
+}
+
+.hooks-notifications-button {
+    position: absolute !important;
+    right: 20px;
+    bottom: 20px;
+}
+
+.badge {
+    position: absolute !important;
+    right: 0;
+    top: -5px;
+    background-color: red;
+    color: white;
+    display: inline-block !important;
+    width: 20px;
+    height: 20px;
+    font-size: 1rem;
+    border-radius: 20px;
+}
+
+.badge span {
+    transform: none !important;
+}
+
+.badge.hidden {
+    display: none !important;
 }

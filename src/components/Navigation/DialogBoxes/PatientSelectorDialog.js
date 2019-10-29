@@ -95,7 +95,7 @@ class PatientSelectorDialog extends React.Component {
         let dif = stage.scrollHeight - stage.scrollTop - stage.offsetHeight;
 
         let shouldFetch = dif <= 50;
-        if(shouldFetch && !this.fetching) {
+        if (shouldFetch && !this.fetching) {
             this.fetching = true;
             console.log('fetching!');
             fetch(this.state.nextPageUrl, {method: 'GET', headers: {'Content-Type': 'application/json;charset=UTF-8', 'Authorization': `Bearer ${this.props.bearer}`}})
@@ -115,9 +115,10 @@ class PatientSelectorDialog extends React.Component {
 
     search = (nameFilter = this.state.nameFilter) => {
         let token = this.props.bearer;
+        window.fhirToken = token;
         let url;
         if (nameFilter !== '') {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?name:contains=${nameFilter}&_sort:asc=family&_sort:asc=given&_count=20`;
+            url = ` /data/Patient?name:contains=${nameFilter}&_sort:asc=family&_sort:asc=given&_count=20`;
         } else {
             url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=20`;
         }
@@ -133,7 +134,7 @@ class PatientSelectorDialog extends React.Component {
                 console.log(e);
                 this.setState({items: []})
             });
-    }
+    };
 
     setupPagination = (results) => {
         let nextPageUrl = results.link.find(i => i.relation === 'next');
