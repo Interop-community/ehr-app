@@ -104,6 +104,7 @@ const FORBIDDEN = ['contextParams', 'sandboxId', 'sandboxApiUrl', 'appId', 'pers
 class HeaderBar extends Component {
 
     buttonClick = false;
+    timer = undefined;
 
     constructor(props) {
         super(props);
@@ -111,11 +112,23 @@ class HeaderBar extends Component {
             key: '',
             val: '',
             open: false,
+            active: false,
             selectedItem: 1,
             addContext: false,
             title: "Choose Patient",
             contextEditVisible: false,
         };
+    }
+
+    componentDidMount() {
+        this.timer = setInterval(() => {
+            !this.props.patient && this.setState({active: !this.state.active});
+            console.log('ASD');
+        }, 1000)
+    }
+
+    componentDidUpdate() {
+        !!this.props.patient && !!this.timer && (this.timer = undefined) && clearInterval(this.timer) && this.setState({active: false});
     }
 
     render() {
@@ -130,7 +143,7 @@ class HeaderBar extends Component {
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
-                <div className="patient-icon-wrapper" onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
+                <div className={`patient-icon-wrapper${this.state.active ? ' active' : ''}`} onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
                     <PersonIcon style={{width: "74px", height: "74px"}}/>
                 </div>
                 {this.props.patient

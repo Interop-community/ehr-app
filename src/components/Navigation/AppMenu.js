@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {List, ListItem, Fab, Badge, Menu, MenuItem, Divider, Dialog, Paper, IconButton} from "@material-ui/core";
+import {ArrowRight} from '@material-ui/icons';
 import ReactMarkdown from "react-markdown";
 import WEB_ASSET from '@material-ui/icons/WebAsset';
 
@@ -63,8 +64,8 @@ class AppMenu extends Component {
             </Fab>
             <Menu className='hooks-list' onClose={this.toggleMenu} open={this.state.menu} anchorEl={this.state.anchorEl} anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
                 {cards.map(card => [
-                    <MenuItem className='hook-item' key={card.id} onClick={() => this.select(card)}>
-                        {card.summary}
+                    <MenuItem className='hook-item' key={card.id} onClick={() => this.select(card)} style={{position: 'relative', paddingRight: '45px'}}>
+                        {card.summary} <ArrowRight style={{position: 'absolute', right: '5px', border: '1px solid darkgray'}} />
                     </MenuItem>,
                     <Divider key={`${card.id}_d`}/>
                 ])}
