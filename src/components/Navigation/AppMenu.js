@@ -8,7 +8,7 @@ import "./AppMenu.css";
 
 const MENU_ITEM_STYLE = {height: "50px", overflow: "hidden", width: '223px', color: 'rgb(117, 117, 117)'};
 const INNER_DIV_STYLE = {width: "224px", overflow: "hidden", boxSizing: "border-box", paddingLeft: '50px'};
-const PRIMARY_TEXT_STYLE = {display: "inline-block", width: "224px", overflow: "hidden", textOverflow: "ellipsis"};
+const PRIMARY_TEXT_STYLE = {display: "inline-block", width: "224px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: 'nowrap'};
 
 class AppMenu extends Component {
     constructor(props) {

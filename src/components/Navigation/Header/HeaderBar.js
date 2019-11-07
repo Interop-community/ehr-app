@@ -123,7 +123,6 @@ class HeaderBar extends Component {
     componentDidMount() {
         this.timer = setInterval(() => {
             !this.props.patient && this.setState({active: !this.state.active});
-            console.log('ASD');
         }, 1000)
     }
 
@@ -140,6 +139,8 @@ class HeaderBar extends Component {
         let disabled = this.props.modifyingCustomContext || (this.state.addContext && (!this.state.key.length || !this.state.val.length));
         let deleteEnabled = this.state.selectedCustomContent !== undefined;
         let onClick = this.state.addContext ? this.addContext : deleteEnabled ? this.deleteCustomContext : this.toggleAddContext;
+
+        console.log(cookieData);
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
@@ -184,11 +185,11 @@ class HeaderBar extends Component {
             </div>
             <div className='header-context-wrapper'>
                 {cookieData.encounter && <span className='section-value'>
-                        <span className='context-icon'>{EventIcon}</span>
-                        <span>{cookieData.encounter}</span>
+                        <span className='context-icon'><EventIcon/></span>
+                    <span>{cookieData.encounter}</span>
                     </span>}
                 {cookieData.location && <span className='section-value'>
-                        <span className='context-icon'>{HospitalIcon}</span>
+                        <span className='context-icon'><HospitalIcon/></span>
                         <span>{cookieData.location}</span>
                     </span>}
                 {cookieData.resource && <span className='section-value'>
@@ -253,6 +254,26 @@ class HeaderBar extends Component {
                              color={`${deleteEnabled ? 'secondary' : 'primary'}`}>
                             {this.state.addContext ? <SaveIcon/> : deleteEnabled ? <DeleteIcon/> : <ContentAdd/>}
                         </Fab>
+                        {cookieData.encounter && <span className='section-value'>
+                        <span className='context-icon'><EventIcon/></span>
+                            <span>{cookieData.encounter}</span>
+                    </span>}
+                        {cookieData.location && <span className='section-value'>
+                        <span className='context-icon'><HospitalIcon/></span>
+                        <span>{cookieData.location}</span>
+                    </span>}
+                        {cookieData.resource && <span className='section-value'>
+                        <span className='context-icon'>{DescriptionIcon}</span>
+                        <span>{cookieData.resource}</span>
+                    </span>}
+                        {cookieData.intent && <span className='section-value'>
+                        <span className='context-icon bulb'>{BulbIcon}</span>
+                        <span>{cookieData.intent}</span>
+                    </span>}
+                        {cookieData.smartStyleUrl && <span className='section-value'>
+                        <span className='context-icon'>{LinkIcon}</span>
+                        <span>{cookieData.smartStyleUrl}</span>
+                    </span>}
                         <Table className='custom-context-table'>
                             <TableHead>
                                 <TableRow>
@@ -269,6 +290,14 @@ class HeaderBar extends Component {
                                         <TextField label='Value*' id='val' onChange={e => this.setState({val: e.target.value})}/>
                                     </TableCell>
                                 </TableRow>}
+                                <TableRow hover selected={this.state.selectedCustomContent === 'encounter'} onClick={() => this.handleContextSelection('encounter')} role='checkbox'>
+                                    <TableCell>
+                                        <EventIcon/>
+                                    </TableCell>
+                                    <TableCell>
+                                        {cookieData.encounter}
+                                    </TableCell>
+                                </TableRow>
                                 {cookieData.contextParams && cookieData.contextParams.map((context, i) => {
                                     return <TableRow hover key={i} selected={this.state.selectedCustomContent === i} onClick={() => this.handleContextSelection(i)} role='checkbox'>
                                         <TableCell>
