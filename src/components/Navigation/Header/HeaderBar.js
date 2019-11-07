@@ -140,8 +140,6 @@ class HeaderBar extends Component {
         let deleteEnabled = this.state.selectedCustomContent !== undefined;
         let onClick = this.state.addContext ? this.addContext : deleteEnabled ? this.deleteCustomContext : this.toggleAddContext;
 
-        console.log(cookieData);
-
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
                 <div className={`patient-icon-wrapper${this.state.active ? ' active' : ''}`} onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
@@ -175,7 +173,7 @@ class HeaderBar extends Component {
                             </span>
                         </div>
                     </div>
-                    : <div className="header-patient-info-wrapper">
+                    : <div className="header-patient-info-wrapper" style={{height: '74px', lineHeight: '64px'}}>
                         <div className="header-patient-info-row no-selection">
                             <div className="header-patient-info">
                                 <span>Please select patient</span>
