@@ -97,3 +97,7 @@ pipelines:
             - echo "success"
 options:
   docker: true
+definitions:
+  services:
+    docker:
+      memory: 2048
