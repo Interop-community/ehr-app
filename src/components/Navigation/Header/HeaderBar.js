@@ -1,20 +1,26 @@
-import React, { Component } from 'react';
-import { getPatientName } from '../../../utils';
+import React, {Component} from 'react';
+import {getPatientName} from '../../../utils';
 import moment from "moment";
-import PersonIcon from "material-ui/svg-icons/action/account-circle";
-import HospitalIcon from "material-ui/svg-icons/maps/local-hospital";
-import EventIcon from "material-ui/svg-icons/action/event";
+import PersonIcon from "@material-ui/icons/AccountCircle";
+import HospitalIcon from "@material-ui/icons/LocalHospital";
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { faUserMd } from '@fortawesome/fontawesome-free-solid';
-import "./Header.css";
-import Cookies from 'js-cookie';
+import {Dialog, IconButton, Fab, Table, TableHead, TableRow, TableBody, TableCell, TextField, withTheme} from '@material-ui/core';
+import ContentAdd from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Save';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EventIcon from '@material-ui/icons/Event';
+import CloseIcon from '@material-ui/icons/Close';
+import {faUserMd} from '@fortawesome/fontawesome-free-solid';
 
-const ContextIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" style={{ fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421 }}>
-    <rect x="0" y="0" width="24" height="24" style={{ fill: 'none' }}/>
+import "./Header.css";
+
+const ContextIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" style={{fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421}}>
+    <rect x="0" y="0" width="24" height="24" style={{fill: 'none'}}/>
     <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,23.96,-8.88178e-16)">
         <path
             d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8C19.66,8 21,6.66 21,5C21,3.34 19.66,2 18,2C16.34,2 15,3.34 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9C4.34,9 3,10.34 3,12C3,13.66 4.34,15 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.35C15.11,18.56 15.08,18.78 15.08,19C15.08,20.61 16.39,21.92 18,21.92C19.61,21.92 20.92,20.61 20.92,19C20.92,17.39 19.61,16.08 18,16.08Z"
-            style={{ fillRule: 'nonzero' }}/>
+            style={{fillRule: 'nonzero'}}/>
     </g>
 </svg>;
 const DescriptionIcon = <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px"
@@ -71,11 +77,11 @@ const DescriptionIcon = <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x=
     </g>
 </svg>;
 const BulbIcon = <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                      style={{ fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421 }}>
+                      style={{fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 1.41421}}>
     <g transform="matrix(0.0390625,0,0,0.0390625,4.5,2)">
         <path
             d="M272,428L272,456C272,466.449 265.32,475.334 256,478.629L256,488C256,501.255 245.255,512 232,512L152,512C138.745,512 128,501.255 128,488L128,478.629C118.68,475.334 112,466.449 112,456L112,428C112,421.373 117.373,416 124,416L260,416C266.627,416 272,421.373 272,428ZM128,176C128,140.71 156.71,112 192,112C200.837,112 208,104.836 208,96C208,87.164 200.837,80 192,80C139.065,80 96,123.065 96,176C96,184.836 103.164,192 112,192C120.836,192 128,184.836 128,176ZM192,48C262.734,48 320,105.254 320,176C320,253.602 282.617,236.477 239.02,336L144.98,336C101.318,236.33 64,253.869 64,176C64,105.265 121.254,48 192,48M192,0C94.805,0 16,78.803 16,176C16,277.731 67.697,267.541 106.516,368.674C110.066,377.923 118.986,384 128.892,384L255.107,384C265.013,384 273.933,377.922 277.483,368.674C316.303,267.541 368,277.731 368,176C368,78.803 289.195,0 192,0Z"
-            style={{ fill: 'rgb(140,140,140)', fillRule: 'nonzero' }}/>
+            style={{fill: 'rgb(140,140,140)', fillRule: 'nonzero'}}/>
     </g>
 </svg>;
 const LinkIcon = <svg version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enableBackground="new 0 0 24 24">
@@ -93,28 +99,51 @@ const LinkIcon = <svg version="1.1" x="0px" y="0px" width="24px" height="24px" v
 		c-2.76,0-5,2.24-5,5s2.24,5,5,5h3c0.55,0,1-0.45,1-1C11,15.45,10.55,15,10,15z"/>
     </g>
 </svg>;
+const FORBIDDEN = ['contextParams', 'sandboxId', 'sandboxApiUrl', 'appId', 'personaId', 'patientId', 'refApi', 'token'];
 
 class HeaderBar extends Component {
 
-    constructor (props) {
+    buttonClick = false;
+    timer = undefined;
+
+    constructor(props) {
         super(props);
         this.state = {
+            key: '',
+            val: '',
             open: false,
+            active: false,
             selectedItem: 1,
+            addContext: false,
             title: "Choose Patient",
+            contextEditVisible: false,
         };
     }
 
-    render () {
+    componentDidMount() {
+        this.timer = setInterval(() => {
+            !this.props.patient && this.setState({active: !this.state.active});
+        }, 1000)
+    }
+
+    componentDidUpdate() {
+        !!this.props.patient && !!this.timer && (this.timer = undefined) && clearInterval(this.timer) && this.setState({active: false});
+    }
+
+    render() {
+        let cookieData = JSON.parse(sessionStorage.launchData);
         const mrn = this.props.patient && this.props.patient.resource.identifier && this.props.patient.resource.identifier[0].value;
 
-        let cookieData = this.getCookieData();
-        let hasContext = cookieData.encounter || cookieData.location || cookieData.resource || cookieData.intent || cookieData.smartStyleUrl || cookieData.contextParams;
+        let theme = this.props.theme;
+        let darkColor = {color: theme.p6};
+        let disabled = this.props.modifyingCustomContext || (this.state.addContext && (!this.state.key.length || !this.state.val.length));
+        let deleteEnabled = this.state.selectedCustomContent !== undefined;
+        let onClick = this.state.addContext ? this.addContext : deleteEnabled ? this.deleteCustomContext : this.toggleAddContext;
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
-                <div className="patient-icon-wrapper" onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
-                    <PersonIcon style={{ width: "74px", height: "74px" }}/>
+                <div className={`patient-icon-wrapper${this.state.active ? ' active' : ''}`} onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
+                    <PersonIcon style={{width: "74px", height: "74px"}}/>
                 </div>
                 {this.props.patient
                     ? <div className="header-patient-info-wrapper">
@@ -144,7 +173,7 @@ class HeaderBar extends Component {
                             </span>
                         </div>
                     </div>
-                    : <div className="header-patient-info-wrapper">
+                    : <div className="header-patient-info-wrapper" style={{height: '74px', lineHeight: '64px'}}>
                         <div className="header-patient-info-row no-selection">
                             <div className="header-patient-info">
                                 <span>Please select patient</span>
@@ -152,13 +181,13 @@ class HeaderBar extends Component {
                         </div>
                     </div>}
             </div>
-            <div className={'header-context-wrapper' + (!hasContext ? ' hidden' : '')}>
+            <div className='header-context-wrapper'>
                 {cookieData.encounter && <span className='section-value'>
-                        <span className='context-icon'>{EventIcon}</span>
-                        <span>{cookieData.encounter}</span>
+                        <span className='context-icon'><EventIcon/></span>
+                    <span>{cookieData.encounter}</span>
                     </span>}
                 {cookieData.location && <span className='section-value'>
-                        <span className='context-icon'>{HospitalIcon}</span>
+                        <span className='context-icon'><HospitalIcon/></span>
                         <span>{cookieData.location}</span>
                     </span>}
                 {cookieData.resource && <span className='section-value'>
@@ -183,6 +212,9 @@ class HeaderBar extends Component {
                             <span>{param.value}</span>
                     </span>;
                 })}
+                <IconButton size='small' className='edit-button' onClick={this.toggleContextEdit}>
+                    <EditIcon/>
+                </IconButton>
             </div>
             <div className="header-persona-wrapper">
                 {this.props.persona
@@ -203,37 +235,119 @@ class HeaderBar extends Component {
                         </div>
                     </div>}
                 <div className="persona-icon-wrapper" onClick={() => this.props.togglePersonaSelector && this.props.togglePersonaSelector()}>
-                    <FontAwesomeIcon icon={faUserMd} style={{ width: "56px", height: "56px", marginLeft: "10px", marginTop: "5px", color: "rgb(255, 255, 255)" }}/>
+                    <FontAwesomeIcon icon={faUserMd} style={{width: "56px", height: "56px", marginLeft: "10px", marginTop: "5px", color: "rgb(255, 255, 255)"}}/>
                 </div>
             </div>
+            <Dialog open={this.state.contextEditVisible} onClose={this.toggleContextEdit}>
+                <div className='custom-context-wrapper'>
+                    <div className='section-title' style={darkColor}>
+                        Context
+                    </div>
+                    <Fab size='small' className='close-button' onClick={this.toggleContextEdit}>
+                        <CloseIcon/>
+                    </Fab>
+                    <div className='custom-context-table-wrapper'>
+                        <Fab onClick={onClick} size='small' className={'add-custom-context' + (deleteEnabled && !this.state.addContext ? ' delete' : '')} disabled={disabled}
+                             onMouseDown={this.clickingOnTheButton}
+                             color={`${deleteEnabled ? 'secondary' : 'primary'}`}>
+                            {this.state.addContext ? <SaveIcon/> : deleteEnabled ? <DeleteIcon/> : <ContentAdd/>}
+                        </Fab>
+                        {cookieData.encounter && <span className='section-value'>
+                        <span className='context-icon'><EventIcon/></span>
+                            <span>{cookieData.encounter}</span>
+                    </span>}
+                        {cookieData.location && <span className='section-value'>
+                        <span className='context-icon'><HospitalIcon/></span>
+                        <span>{cookieData.location}</span>
+                    </span>}
+                        {cookieData.resource && <span className='section-value'>
+                        <span className='context-icon'>{DescriptionIcon}</span>
+                        <span>{cookieData.resource}</span>
+                    </span>}
+                        {cookieData.intent && <span className='section-value'>
+                        <span className='context-icon bulb'>{BulbIcon}</span>
+                        <span>{cookieData.intent}</span>
+                    </span>}
+                        {cookieData.smartStyleUrl && <span className='section-value'>
+                        <span className='context-icon'>{LinkIcon}</span>
+                        <span>{cookieData.smartStyleUrl}</span>
+                    </span>}
+                        <Table className='custom-context-table'>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{color: theme.p3}}>Key</TableCell>
+                                    <TableCell style={{color: theme.p3}}>Value</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody className='table-body'>
+                                {this.state.addContext && <TableRow>
+                                    <TableCell>
+                                        <TextField label='Key*' id='key' onChange={e => this.setState({key: e.target.value})}/>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField label='Value*' id='val' onChange={e => this.setState({val: e.target.value})}/>
+                                    </TableCell>
+                                </TableRow>}
+                                <TableRow hover selected={this.state.selectedCustomContent === 'encounter'} onClick={() => this.handleContextSelection('encounter')} role='checkbox'>
+                                    <TableCell>
+                                        <EventIcon/>
+                                    </TableCell>
+                                    <TableCell>
+                                        {cookieData.encounter}
+                                    </TableCell>
+                                </TableRow>
+                                {cookieData.contextParams && cookieData.contextParams.map((context, i) => {
+                                    return <TableRow hover key={i} selected={this.state.selectedCustomContent === i} onClick={() => this.handleContextSelection(i)} role='checkbox'>
+                                        <TableCell>
+                                            {context.name}
+                                        </TableCell>
+                                        <TableCell>
+                                            {context.value}
+                                        </TableCell>
+                                    </TableRow>
+                                })}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
+            </Dialog>
         </div>;
     }
 
-    getCookieData = () => {
-        let data = {};
-        let name = 'hspc-launch-token=';
-        let decodedCookie = decodeURIComponent(document.cookie);
-        if (decodedCookie.indexOf(name) >= 0) {
-            let ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    data = c.substring(name.length, c.length);
-                }
-            }
+    addContext = () => {
+        let data = JSON.parse(sessionStorage.launchData);
+        data.contextParams = data.contextParams || [];
+        data.contextParams.push({name: this.state.key, value: this.state.val});
+        sessionStorage.launchData = JSON.stringify(data);
+        this.props.updateCustomContext && this.props.updateCustomContext();
+        this.setState({addContext: false, key: '', val: ''});
+        this.buttonClick = false;
+    };
 
-            sessionStorage.launchData = data;
-            data = JSON.parse(data);
+    toggleAddContext = () => {
+        this.setState({addContext: !this.state.addContext});
+        this.buttonClick = false;
+    };
 
-            // Cookies.remove('hspc-launch-token', { path: '/' });
-        } else if (sessionStorage.launchData) {
-            data = JSON.parse(sessionStorage.launchData);
-        }
+    deleteCustomContext = () => {
+        let data = JSON.parse(sessionStorage.launchData);
+        data.contextParams.splice(this.state.selectedCustomContent, 1);
+        sessionStorage.launchData = JSON.stringify(data);
+        this.props.updateCustomContext && this.props.updateCustomContext();
+        this.setState({selectedCustomContent: undefined});
+        this.buttonClick = false;
+    };
 
-        return data;
+    clickingOnTheButton = () => {
+        this.buttonClick = true;
+    };
+
+    handleContextSelection = (selection) => {
+        this.setState({selectedCustomContent: selection});
+    };
+
+    toggleContextEdit = () => {
+        this.setState({contextEditVisible: !this.state.contextEditVisible})
     };
 
     getAge = (birthday) => {
@@ -243,14 +357,14 @@ class HeaderBar extends Component {
         let result = "";
         let years = currentDate.diff(birthDate, 'years');
         result += years + 'y ';
-        currentDate.subtract({ years });
+        currentDate.subtract({years});
         let months = currentDate.diff(birthDate, 'months');
         result += months + 'm ';
-        currentDate.subtract({ months });
+        currentDate.subtract({months});
         let days = currentDate.diff(birthDate, 'days');
         result += days + 'd';
         return result;
     };
 }
 
-export default HeaderBar;
+export default withTheme(HeaderBar);

@@ -1,9 +1,223 @@
 .app-menu-item:hover {
-    background-color: rgba(0,87,120, .1) !important;
+    background-color: rgba(0, 87, 120, .1) !important;
 }
 
 .app-menu-item.first {
     border-bottom: 1px solid lightgray !important;
     position: relative !important;
     top: -8px;
+}
+
+.hooks-notifications-button {
+    position: absolute !important;
+    right: 20px;
+    bottom: 20px;
+}
+
+.badge {
+    position: absolute !important;
+    right: 0;
+    top: -5px;
+    background-color: red;
+    color: white;
+    display: inline-block !important;
+    width: 20px;
+    height: 20px;
+    font-size: 1rem;
+    border-radius: 20px;
+}
+
+.badge span {
+    transform: none !important;
+}
+
+.badge.hidden {
+    display: none !important;
+}
+
+.hook-item {
+    padding-right: 10px;
+}
+
+.hook-item.clear {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding-right: 10px;
+}
+
+.hook-item.clear .clear-button {
+    background-color: rgb(157, 0, 114);
+    color: white;
+    padding: 5px 15px;
+    position: relative;
+    top: 3px;
+    border-radius: 5px;
+}
+
+.hooks-dialog {
+    width: 800px;
+    max-width: none !important;
+}
+
+.hooks-dialog .close-button {
+    float: right;
+    color: white;
+    z-index: 100;
+    margin: 0 !important;
+    width: 68px !important;
+    height: 68px !important;
+}
+
+.hooks-dialog .close-button span:first-of-type {
+    transform: rotate(45deg);
+    font-size: 2rem;
+}
+
+.hooks-dialog h3 {
+    background-color: #005778;
+    color: white;
+    padding: 22px;
+    margin-top: 0;
+}
+
+.hooks-wrapper .hook-card-wrapper {
+    padding: 15px;
+    margin: 10px;
+    background: #fcfcfc;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    border-left-width: 3px;
+}
+
+.hooks-wrapper .hook-card-wrapper.info {
+    border-left-color: #0079be;
+}
+
+.hooks-wrapper .hook-card-wrapper.info .card-summary {
+    color: #0079be;
+}
+
+.hooks-wrapper .hook-card-wrapper.warning {
+    border-left-color: #ffae42;
+}
+
+.hooks-wrapper .hook-card-wrapper.warning .card-summary {
+    color: #ffae42;
+}
+
+.hooks-wrapper .hook-card-wrapper.critical {
+    border-left-color: #cc0000;
+}
+
+.hooks-wrapper .hook-card-wrapper.critical .card-summary {
+    color: #cc0000;
+}
+
+.hooks-wrapper .hook-card-wrapper .card-summary {
+    font-size: 1.286rem;
+    font-weight: 700;
+}
+
+.hooks-wrapper .hook-card-wrapper .card-detail {
+    margin-top: 20px;
+}
+
+.hooks-wrapper .hook-card-wrapper .hook-suggestion-button:not(:disabled) {
+    background-color: #0079be;
+    border-bottom-color: #01639e;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #01639e;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: #01639e;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: #01639e;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    height: 30px;
+    line-height: 20.006px;
+    outline-color: #ffffff;
+    padding: 4px 5px;
+    text-align: center;
+    text-decoration-color: #ffffff;
+    margin: 2px 5px;
+    border-radius: 5px;
+}
+
+.hooks-wrapper .hook-card-wrapper img {
+    max-width: 200px;
+    padding-bottom: 10px;
+}
+
+.hooks-dialog {
+    width: 800px;
+    min-width: 35vw;
+    max-width: inherit !important;
+}
+
+.hooks-dialog .paper-body > div:last-child {
+    overflow: auto;
+    height: calc(100% - 48px);
+}
+
+.hooks-dialog > div:first-of-type {
+    padding: 0 !important;
+    height: 50vh;
+    overflow: hidden;
+}
+
+.hooks-dialog .no-cards-message {
+    text-align: center;
+    width: 100%;
+    padding-top: 100px;
+}
+
+.hooks-dialog .cards-tabs-wrapper {
+    overflow: hidden;
+}
+
+.hooks-dialog .cards-tabs-wrapper > div:nth-child(2) {
+    background-color: whitesmoke;
+}
+
+.hooks-dialog .cards-tabs-wrapper .object-content div {
+    word-break: break-all;
+}
+
+.hooks-dialog .react-json-view {
+    padding: 10px;
+}
+
+.hooks-dialog .react-json-view .variable-value {
+    width: 100%;
+    overflow: hidden;
+    white-space: normal;
+    word-break: break-all;
+}
+
+.hooks-dialog .paper-card {
+    height: 100%;
+}
+
+.hooks-dialog .paper-card .paper-body {
+    height: calc(100% - 68px);
+    padding: 0;
+}
+
+.hooks-dialog .links {
+    margin-top: 10px;
+}
+
+.hooks-dialog .app-warning {
+    display: block;
+    font-size: 0.8rem;
+    color: #9C0227;
 }
