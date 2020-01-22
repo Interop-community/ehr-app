@@ -142,44 +142,46 @@ class HeaderBar extends Component {
 
         return <div className="header-wrapper">
             <div className="header-patient-wrapper">
-                <div className={`patient-icon-wrapper${this.state.active ? ' active' : ''}`} onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
-                    <PersonIcon style={{width: "74px", height: "74px"}}/>
-                </div>
-                {this.props.patient
-                    ? <div className="header-patient-info-wrapper">
-                        <div className="header-patient-info-row">
-                            <div className="header-info patient-name">
-                                <span>{getPatientName(this.props.patient.resource)}</span>
+                <div onClick={() => this.props.togglePatientSelector && this.props.togglePatientSelector()}>
+                    <div className={`patient-icon-wrapper${this.state.active ? ' active' : ''}`}>
+                        <PersonIcon style={{width: "74px", height: "74px"}}/>
+                    </div>
+                    {this.props.patient
+                        ? <div className="header-patient-info-wrapper">
+                            <div className="header-patient-info-row">
+                                <div className="header-info patient-name">
+                                    <span>{getPatientName(this.props.patient.resource)}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div>
+                            <div>
                             <span className="header-info dob">
                                 <span>DOB:</span>
                                 <span>{moment(this.props.patient.resource.birthDate).format("DD MMM YYYY")}</span>
                             </span>
-                            <span className="header-info age">
+                                <span className="header-info age">
                                 <span>Age: </span>
                                 <span>{this.getAge(this.props.patient.resource.birthDate)}</span>
                             </span>
-                        </div>
-                        <div>
+                            </div>
+                            <div>
                             <span className="header-info mrn">
                                 <span>MRN:</span>
                                 <span>{mrn}</span>
                             </span>
-                            <span className="header-info gender">
+                                <span className="header-info gender">
                                 <span>Gender:</span>
                                 <span>{this.props.patient.resource.gender.charAt(0).toUpperCase() + this.props.patient.resource.gender.slice(1)}</span>
                             </span>
-                        </div>
-                    </div>
-                    : <div className="header-patient-info-wrapper" style={{height: '74px', lineHeight: '64px'}}>
-                        <div className="header-patient-info-row no-selection">
-                            <div className="header-patient-info">
-                                <span>Please select patient</span>
                             </div>
                         </div>
-                    </div>}
+                        : <div className="header-patient-info-wrapper" style={{height: '74px', lineHeight: '64px'}}>
+                            <div className="header-patient-info-row no-selection">
+                                <div className="header-patient-info">
+                                    <span>Please select patient</span>
+                                </div>
+                            </div>
+                        </div>}
+                </div>
             </div>
             <div className='header-context-wrapper'>
                 {cookieData.encounter && <span className='section-value'>
