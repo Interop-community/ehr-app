@@ -248,79 +248,81 @@ export default class Home extends React.Component {
         let hookInstance = this.random(64);
         let services = this.getCookie('hspc-hooks-list');
         let token = this.getCookie('hspc-launch-token');
-        services = JSON.parse(services);
-        token = JSON.parse(token);
-        services.map(service => {
-            service.cdsHooks.map(hook => {
-                if (hook.hook === 'patient-view') {
-                    let context = {patientId: patientId, userId: this.state.selectedPersona.fhirId};
-                    // Authorize the hook
-                    let userData = {username: this.state.selectedPersona.personaUserId, password: this.state.selectedPersona.password};
+        if (!!services) {
+            services = JSON.parse(services);
+            token = JSON.parse(token);
+            services.map(service => {
+                service.cdsHooks.map(hook => {
+                    if (hook.hook === 'patient-view') {
+                        let context = {patientId: patientId, userId: this.state.selectedPersona.fhirId};
+                        // Authorize the hook
+                        let userData = {username: this.state.selectedPersona.personaUserId, password: this.state.selectedPersona.password};
 
-                    API.post(window.location.protocol + "//" + token.sandboxApiUrl + "/userPersona/authenticate", userData)
-                        .then(authData => {
-                            let data = {
-                                hookInstance,
-                                hook: hook.hook,
-                                fhirServer: `${window.location.protocol}//${this.state.refApi}/${this.state.sandboxId}`,
-                                context,
-                                fhirAuthorization: {
-                                    access_token: this.state.bearer,
-                                    token_type: "Bearer",
-                                    scope: "patient/*.read user/*.read",
-                                    subject: hook.hook
-                                },
-                                prefetch: {}
-                            };
+                        API.post(window.location.protocol + "//" + token.sandboxApiUrl + "/userPersona/authenticate", userData)
+                            .then(authData => {
+                                let data = {
+                                    hookInstance,
+                                    hook: hook.hook,
+                                    fhirServer: `${window.location.protocol}//${this.state.refApi}/${this.state.sandboxId}`,
+                                    context,
+                                    fhirAuthorization: {
+                                        access_token: this.state.bearer,
+                                        token_type: "Bearer",
+                                        scope: "patient/*.read user/*.read",
+                                        subject: hook.hook
+                                    },
+                                    prefetch: {}
+                                };
 
-                            // Prefetch any data that the hook might need
-                            if (hook.prefetch) {
-                                let promises = [];
-                                Object.keys(hook.prefetch).map(key => {
-                                    let url = hook.prefetch[key];
-                                    let regex = new RegExp(/\{\{context\.(.*?)\}\}/gi);
-                                    url = url.replace(regex, (a, b) => context[b]);
-                                    promises.push(new Promise((resolve, reject) => {
-                                        API.get(`${window.location.protocol}//${this.state.refApi}/${this.state.sandboxId}/data/${encodeURI(url)}`)
-                                            .then(result => {
-                                                data.prefetch[key] = result;
-                                                resolve();
-                                            })
-                                            .catch(e => {
-                                                reject();
-                                            })
-                                    }));
-                                });
-                                Promise.all(promises)
-                                    .then(() => {
-                                        // Trigger the hook
-                                        API.post(`${encodeURI(hook.hookUrl)}`, data)
-                                            .then(cards => {
-                                                if (cards) {
-                                                    cards.cards && cards.cards.map(card => {
-                                                        card.requestData = data;
-                                                    });
-                                                    cards.cards && this.setState({cards: this.state.cards.concat(cards.cards)})
-                                                }
-                                            })
-                                    })
-                            } else {
-                                // Trigger the hook
-                                API.post(`${encodeURI(hook.hookUrl)}`, data)
-                                    .then(cards => {
-                                        if (cards) {
-                                            cards.cards = cards.cards || [{noCardsReturned: true}];
-                                            cards.cards.map(card => {
-                                                card.requestData = data;
-                                            });
-                                            cards.cards && this.setState({cards: this.state.cards.concat(cards.cards)})
-                                        }
-                                    })
-                            }
-                        })
-                }
+                                // Prefetch any data that the hook might need
+                                if (hook.prefetch) {
+                                    let promises = [];
+                                    Object.keys(hook.prefetch).map(key => {
+                                        let url = hook.prefetch[key];
+                                        let regex = new RegExp(/\{\{context\.(.*?)\}\}/gi);
+                                        url = url.replace(regex, (a, b) => context[b]);
+                                        promises.push(new Promise((resolve, reject) => {
+                                            API.get(`${window.location.protocol}//${this.state.refApi}/${this.state.sandboxId}/data/${encodeURI(url)}`)
+                                                .then(result => {
+                                                    data.prefetch[key] = result;
+                                                    resolve();
+                                                })
+                                                .catch(e => {
+                                                    reject();
+                                                })
+                                        }));
+                                    });
+                                    Promise.all(promises)
+                                        .then(() => {
+                                            // Trigger the hook
+                                            API.post(`${encodeURI(hook.hookUrl)}`, data)
+                                                .then(cards => {
+                                                    if (cards) {
+                                                        cards.cards && cards.cards.map(card => {
+                                                            card.requestData = data;
+                                                        });
+                                                        cards.cards && this.setState({cards: this.state.cards.concat(cards.cards)})
+                                                    }
+                                                })
+                                        })
+                                } else {
+                                    // Trigger the hook
+                                    API.post(`${encodeURI(hook.hookUrl)}`, data)
+                                        .then(cards => {
+                                            if (cards) {
+                                                cards.cards = cards.cards || [{noCardsReturned: true}];
+                                                cards.cards.map(card => {
+                                                    card.requestData = data;
+                                                });
+                                                cards.cards && this.setState({cards: this.state.cards.concat(cards.cards)})
+                                            }
+                                        })
+                                }
+                            })
+                    }
+                });
             });
-        });
+        }
     };
 
     random = (length) => {
