@@ -6,11 +6,11 @@
 }
 
 .header-persona-info-wrapper {
-    width: 200px;
     overflow: hidden;
     height: 63px;
     float: right;
     margin-top: 10px;
+    min-width: 210px;
 }
 
 .header-persona-wrapper, .header-patient-wrapper {

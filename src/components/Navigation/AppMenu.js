@@ -105,7 +105,8 @@ class AppMenu extends Component {
                             let appToLaunch = this.props.apps.find(app => app.launchUri === link.url);
                             let contextParams = link.appContext ? [{name: 'appContext', value: link.appContext}] : undefined;
                             let onClick = appToLaunch && card.requestData && card.requestData.context && card.requestData.context.patientId
-                                ? () => this.props.doLaunch(appToLaunch, card.requestData.context.patientId, undefined, undefined, {contextParams, needPatientBanner: 'T'})
+                                // ? () => this.props.doLaunch(appToLaunch, undefined, undefined, undefined, {contextParams, needPatientBanner: 'T'})
+                                ? () => this.props.doLaunch(appToLaunch) || this.select() || this.toggleMenu()
                                 : null;
 
                             return <Fragment key={i}>
