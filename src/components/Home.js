@@ -107,7 +107,7 @@ export default class Home extends React.Component {
                                    sandboxId={this.state.sandboxId} handlePersonaSelection={e => this.changePersona(e, 'persona')} onClose={() => this.setState({showPersonaSelector: false})}/>
             <Paper style={divStyle}>
                 {this.state.loadedApps && <AppMenu patient={this.state.selectedPatient} handleAppMenu={this.handleAppMenu} apps={this.state.loadedApps} clearNotifications={this.clearNotifications}
-                                                   selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined} cards={this.state.cards}/>}
+                                                   selectedItem={this.state.currentApp ? this.state.currentApp.id : undefined} cards={this.state.cards} doLaunch={this.handleAppMenu}/>}
             </Paper>
             {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">
                 <span>
