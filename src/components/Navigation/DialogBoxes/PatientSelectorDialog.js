@@ -116,11 +116,9 @@ class PatientSelectorDialog extends React.Component {
     search = (nameFilter = this.state.nameFilter) => {
         let token = this.props.bearer;
         window.fhirToken = token;
-        let url;
+        let url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=20`;
         if (nameFilter !== '') {
-            url = ` /data/Patient?name:contains=${nameFilter}&_sort:asc=family&_sort:asc=given&_count=20`;
-        } else {
-            url = `${window.location.protocol}//${this.props.refApi}/${this.props.sandboxId}/data/Patient?_sort:asc=family&_sort:asc=given&_count=20`;
+            url += `&name:contains=${nameFilter}`;
         }
 
 
