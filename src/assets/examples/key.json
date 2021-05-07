@@ -4,10 +4,10 @@
     "authClient": {
       "clientName": "Bilirubin Chart",
       "clientId": "bilirubin_chart",
-      "redirectUri": "https://bilirubin-risk-chart-test.logicahealth.org/index.html"
+      "redirectUri": "https://bilirubin-risk-chart-test.interop.community/index.html"
     },
-    "appUri": "https://bilirubin-risk-chart-test.logicahealth.org/",
-    "launchUri": "https://bilirubin-risk-chart-test.logicahealth.org/launch.html",
+    "appUri": "https://bilirubin-risk-chart-test.interop.community/",
+    "launchUri": "https://bilirubin-risk-chart-test.interop.community/launch.html",
     "logoUri": "https://content.logicahealth.org/images/bilirubin/logo/bilirubin.png"
   },
   "iss": "http://localhost:8075/fiver/data",

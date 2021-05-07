@@ -14,7 +14,7 @@ export default class GuestGreeting extends React.Component{
                 <div>
                     Please open this app using the
                 </div>
-                <a href="https://sandbox.logicahealth.org">
+                <a href="https://sandbox.interop.community">
                     Sandbox.
                 </a>
             </div>
