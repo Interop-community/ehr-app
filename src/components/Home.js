@@ -4,7 +4,7 @@ import {Paper} from "@material-ui/core";
 import ShowApp from "./ShowApp";
 import PatientSelectorDialog from "./Navigation/DialogBoxes/PatientSelectorDialog";
 import PersonaSelectorDialog from "./Navigation/DialogBoxes/PersonaSelectorDialog";
-import logo from '../assets/images/hspc-sndbx-logo.png';
+import logo from '../assets/images/Meld Logo.FINAL-14.png';
 import {call, setPersonaCookie, removePersonaCookie} from "../utils";
 import HeaderBar from "./Navigation/Header/HeaderBar";
 import API from '../utils/api';
@@ -111,7 +111,7 @@ export default class Home extends React.Component {
             </Paper>
             {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">
                 <span>
-                    <img src={logo} style={{height: '80px', marginBottom: '20px'}}/>
+                    <img src={logo} style={{height: '50vw', marginBottom: '0px'}}/>
                 </span>
                 <span>Please select an app.</span>
             </div>}
