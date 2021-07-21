@@ -111,7 +111,7 @@ export default class Home extends React.Component {
             </Paper>
             {this.state.selectedPatient && !this.state.currentApp && this.state.loadedApps && <div className="ehr-content-wrapper padding">
                 <span>
-                    <img src={logo} style={{height: '50vw', marginBottom: '0px'}}/>
+                    <img src={logo} style={{height: '30vw', marginBottom: '0px'}}/>
                 </span>
                 <span>Please select an app.</span>
             </div>}
