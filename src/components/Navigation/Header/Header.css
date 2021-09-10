@@ -8,9 +8,13 @@
 .header-persona-info-wrapper {
     overflow: hidden;
     height: 63px;
-    float: right;
+    float: left;
     margin-top: 10px;
     min-width: 210px;
+}
+
+.header-persona-info-row {
+    margin-top: 23px;
 }
 
 .header-persona-wrapper, .header-patient-wrapper {
@@ -75,7 +79,7 @@
 .header-persona-wrapper {
     width: 20%;
     position: absolute;
-    min-width: 290px;
+    min-width: 240px;
 }
 
 .patient-icon-wrapper,
@@ -127,7 +131,7 @@
     color: white;
 }
 
-.header-info:not(.patient-name):not(.persona-id) {
+.header-info {
     width: 130px;
     display: inline-block;
     font-weight: 100;
@@ -178,6 +182,7 @@
 
 .persona-name {
     font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .persona-id {
@@ -189,6 +194,7 @@
     width: 60px;
     height: 1.5rem;
     line-height: 1.5rem;
+    font-weight: bold;
 }
 
 .context-icon {
